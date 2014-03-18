@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.framework</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>framework-parent</artifactId>
 		<version>1.0</version>
 	</parent>
 	<artifactId>framework-interfaces</artifactId>

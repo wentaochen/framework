@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.framework</groupId>
-	<artifactId>parent</artifactId>
+	<artifactId>framework-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>framework's Parent pom.xml</name>
 	<version>1.0</version>
 	<organization>
 		<name>framework</name>
-		<url>http://www.framework.com</url>
+		<url>https://github.com/wentaochen/framework.git</url>
 	</organization>
 
 	<properties>
@@ -34,11 +32,11 @@
 		<freemarker.version>2.3.16</freemarker.version>
 		<jackson2.version>2.0.1</jackson2.version>
 
-		<!-- Plugin的属性定义 -->
+		<!-- Plugin的属性定�?-->
 		<project.build.sourceEncoding>GBK</project.build.sourceEncoding>
 	</properties>
 
-	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
+	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�? -->
 	<repositories>
 		<!--  
 		<repository>
@@ -138,7 +136,7 @@
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>
-	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
+	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId �?artifactId 即可 -->
 	<!--dependencyManagement继承效果 -->
 	<dependencyManagement>
 		<dependencies>
@@ -594,7 +592,7 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 
-			<!-- slf4j没有log4j的情形 -->
+			<!-- slf4j没有log4j的情�?-->
 			<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
@@ -674,6 +672,12 @@
 				<groupId>xerces</groupId>
 				<artifactId>xercesImpl</artifactId>
 				<version>2.9.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.2.2</version>
 			</dependency>
 			<!-- xml end -->
 
@@ -1132,7 +1136,7 @@
 						</execution>
 					</executions>
 					<configuration>
-						<skip>${maven.test.skip}</skip><!--很重要，可以控制是否要在package时重新建表 -->
+						<skip>${maven.test.skip}</skip><!--很重要，可以控制是否要在package时重新建�?-->
 						<components>
 							<component>
 								<name>hbm2ddl</name>
@@ -1177,4 +1181,9 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+  <modules>
+    <module>framework-showcase</module>
+    <module>framework-weixin</module>
+    <module>weixin</module>
+  </modules>
 </project>
