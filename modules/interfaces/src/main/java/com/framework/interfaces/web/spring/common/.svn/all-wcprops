@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common
+END
+ServiceException.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/ServiceException.java
+END
+CommonError.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/CommonError.java
+END
+ResourceNotFoundException.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/ResourceNotFoundException.java
+END
+AbstractController.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/AbstractController.java
+END
+SecurityServiceException.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/SecurityServiceException.java
+END
+EncodingPostProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/spring/common/EncodingPostProcessor.java
+END

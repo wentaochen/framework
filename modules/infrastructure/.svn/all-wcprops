@@ -1,0 +1,27 @@
+K 26
+svn:wc:ra_dav:activity-url
+V 29
+/svn/infrastructure/!svn/act/
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/infrastructure/!svn/ver/41/trunk
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/infrastructure/!svn/ver/32/trunk/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/infrastructure/!svn/ver/47/trunk/.project
+END
+pom.xml
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/infrastructure/!svn/ver/46/trunk/pom.xml
+END

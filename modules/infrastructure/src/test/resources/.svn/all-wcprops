@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources
+END
+applicationContext-jpa.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/applicationContext-jpa.xml
+END
+applicationContext-test.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/applicationContext-test.xml
+END
+test-data.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/test-data.xml
+END
+applicationContext-core-test.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/applicationContext-core-test.xml
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/log4j.properties
+END
+test1.properties
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/test1.properties
+END
+application.test.properties
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/application.test.properties
+END
+hibernate.properties
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/hibernate.properties
+END
+test2.properties
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/test2.properties
+END
+schema.sql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/infrastructure/!svn/ver/32/trunk/src/test/resources/schema.sql
+END

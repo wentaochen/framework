@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/infrastructure/!svn/ver/40/trunk/src/main/java/com/framework/infrastructure/utils
+END
+VelocityUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/VelocityUtils.java
+END
+JettyUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/JettyUtils.java
+END
+ConvertUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/ConvertUtils.java
+END
+HibernateUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/HibernateUtils.java
+END
+HotswapAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/HotswapAgent.java
+END
+HtmlUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/HtmlUtils.java
+END
+ServletUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/ServletUtils.java
+END
+SpringContextHolder.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/SpringContextHolder.java
+END
+ClassLoaderUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/ClassLoaderUtil.java
+END
+PageUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/PageUtil.java
+END
+ReflectionUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/ReflectionUtils.java
+END
+PropertiesUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/infrastructure/!svn/ver/40/trunk/src/main/java/com/framework/infrastructure/utils/PropertiesUtils.java
+END
+EncodeUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/infrastructure/!svn/ver/32/trunk/src/main/java/com/framework/infrastructure/utils/EncodeUtils.java
+END

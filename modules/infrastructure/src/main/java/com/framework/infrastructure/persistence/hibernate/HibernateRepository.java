@@ -1,0 +1,1214 @@
+package com.framework.infrastructure.persistence.hibernate;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.CacheMode;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.LockOptions;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session.LockRequest;
+import org.hibernate.cfg.Environment;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.impl.CriteriaImpl;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.transform.ResultTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+
+import com.framework.infrastructure.persistence.Page;
+import com.framework.infrastructure.persistence.PropertyFilter;
+import com.framework.infrastructure.persistence.PropertyFilter.MatchType;
+import com.framework.infrastructure.utils.ReflectionUtils;
+
+/**
+ * lock机制
+ * 
+ * <pre> 
+ * A call to Session.load(), specifying a LockMode. 
+ * A call to Session.lock(). 
+ * A call to Query.setLockMode(). 
+ * If Session.load() is called
+ * with UPGRADE or UPGRADE_NOWAIT, and the requested object was not yet loaded
+ * by the session, the object is loaded using SELECT ... FOR UPDATE. If load()
+ * is calledChapter 12. Transactions and ... 186 for an object that is already
+ * loaded with a less restrictive lock than the one requested, Hibernate calls
+ * lock() for that object. Session.lock() performs a version number check if the
+ * specified lock mode is READ, UPGRADE or UPGRADE_NOWAIT. In the case of
+ * UPGRADE or UPGRADE_NOWAIT, SELECT ... FOR UPDATE is used. If the requested
+ * lock mode is not supported by the database, Hibernate uses an appropriate
+ * alternate mode instead of throwing an exception. This ensures that
+ * applications are portable 
+ * 
+ * Demo
+ * Query query = session.createQuery("FROM IsoDeal d WHERE chunk-clause");
+ query.setLockMode("d", LockMode.UPGRADE); //for Inprocess status update
+ List<IsoDeal> isoDeals = query.list();
+ for (IsoDeal isoDeal : isoDeals) { //update status to Inprocess
+ isoDeal.setStatus("Inprocess");
+ }
+ return isoDeals; 
+ * </pre>
+ * 
+ * 
+ * <pre>
+ * 优化方法
+ * 1.如果有一个主键key,优先使用load和get方法,因为它们在一个Session中会使用一级缓存
+ * 而hql却不会
+ * 2.QueryCache和二级缓存是分开的,两者没有直接的依赖关系--经过本人验证,启动报错看来还是有依赖关系
+ * 3.
+ * @author chenwentao
+ *
+ * @version 0.9
+ *
+ * 修改版本: 0.9
+ * 修改日期: Nov 17, 2010
+ * 修改人 :  chenwentao
+ * 修改说明: 初步完成
+ * 复审人 ：
+ * </pre>
+ */
+@Scope("singleton")
+@Repository("hibernateRepository")
+@SuppressWarnings("unchecked")
+public class HibernateRepository {
+
+	private Logger logger = LoggerFactory.getLogger(HibernateRepository.class);
+
+	@Inject
+	protected SessionFactory sessionFactory;
+
+	/**
+	 * 默认的 HibernateRepository 构造方法
+	 */
+	public HibernateRepository() {
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	/**
+	 * 取得sessionFactory.
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * 取得当前Session.
+	 */
+	public Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
+	/**
+	 * @param entity
+	 */
+	public <T> Serializable save(T entity) {
+		return getSession().save(entity);
+	}
+
+	/**
+	 * 
+	 */
+	public <T> void persist(T entity) {
+		getSession().persist(entity);
+
+	}
+
+	/**
+	 * 批量更新
+	 * 
+	 * @param entities
+	 */
+	public void save(Collection<?> entities) {
+		Session session = getSession();
+		// 禁用二级缓存
+		session.setCacheMode(CacheMode.IGNORE);
+		int i = 0;
+		int batchSize = 30;
+
+		try {
+			batchSize = Integer
+					.parseInt((Environment.getProperties().get(Environment.STATEMENT_BATCH_SIZE).toString()));
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+
+		for (Iterator<?> it = entities.iterator(); it.hasNext();) {
+			session.saveOrUpdate(it.next());
+
+			// 每执行batchSize条清空一次一级缓存
+			if (++i % batchSize == 0) {
+				session.flush();
+				session.clear();
+			}
+		}
+
+		if (i % batchSize != 0) {
+			session.flush();
+			session.clear();
+		}
+	}
+
+	/**
+	 * @param entity
+	 */
+	public <T> void saveOrUpdate(T entity) {
+		getSession().saveOrUpdate(entity);
+	}
+
+	/**
+	 * @param entity
+	 */
+	public <T> void update(T entity) {
+		getSession().update(entity);
+	}
+
+	/**
+	 * @param object
+	 * @return
+	 */
+	public <T> T merge(T entity) {
+		return (T) getSession().merge(entity);
+	}
+
+	/**
+	 * @param persistentEntity
+	 */
+	public <T> void delete(T entity) {
+		Assert.notNull(entity, "entity不能为空");
+		getSession().delete(entity);
+	}
+
+	/**
+	 * 按id删除对象.
+	 * 
+	 * @param entityClass
+	 * @param id
+	 */
+	public void delete(Class entityClass, Serializable id) {
+		delete(get(entityClass, id));
+	}
+
+	/**
+	 * 调用batchExecute构造HQL,进行删除
+	 * 
+	 * @param deleteHql
+	 * @param id
+	 */
+	public void delete(String deleteHql, Object... values) {
+		batchExecute(deleteHql, values);
+	}
+
+	/**
+	 * @param <T>
+	 * @param entityClass
+	 * @param id
+	 * @return
+	 */
+	public <T> T get(Class entityClass, final Serializable id) {
+		return (T) getSession().get(entityClass, id);
+	}
+
+	/**
+	 * 按id列表获取对象列表.
+	 */
+	public <T> List<T> get(final Collection<?> ids, Class entityClass) {
+		return find(entityClass, Restrictions.in(getIdName(entityClass), ids));
+	}
+
+	/**
+	 * @param <T>
+	 * @param entityClass
+	 * @param id
+	 * @param lockMode
+	 * @return
+	 */
+	public <T> T get(Class entityClass, Serializable id, LockOptions lockMode) {
+		return (T) getSession().get(entityClass, id, lockMode);
+	}
+
+	/**
+	 * @param <T>
+	 * @param entityClass
+	 * @param id
+	 * @return
+	 */
+	public <T> T load(Class entityClass, Serializable id) {
+		return (T) getSession().load(entityClass, id);
+	}
+
+	/**
+	 * @param <T>
+	 * @param entityClass
+	 * @param id
+	 * @param lockMode
+	 * @return
+	 */
+	public <T> T load(Class entityClass, Serializable id, LockOptions lockMode) {
+		return (T) getSession().load(entityClass, id, lockMode);
+	}
+
+	/**
+	 * 按属性过滤条件列表查找对象列表.
+	 */
+	public <T> List<T> find(Class entityClass, List<PropertyFilter> filters) {
+		Criterion[] criterions = buildCriterionByPropertyFilter(filters);
+		return find(entityClass, criterions);
+	}
+
+	/**
+	 * @param <T>
+	 * @param hql
+	 * @param values
+	 * @return
+	 */
+	public <T> List<T> find(final String hql, final Object... values) {
+		return createQuery(null, false, null, null, hql, values).list();
+	}
+
+	/**
+	 * @param <T>
+	 * @param lockMode
+	 * @param hql
+	 * @param values
+	 * @return
+	 */
+	public <T> List<T> find(final LockOptions lockMode, final String hql, final Object... values) {
+		return createQuery(lockMode, false, null, null, hql, values).list();
+	}
+
+	/**
+	 * 按HQL查询对象列表.
+	 * 
+	 * @param values
+	 *            命名参数,按名称绑定.
+	 */
+	public <T> List<T> find(final String hql, final Map<String, ?> values) {
+		return createQuery(hql, values).list();
+	}
+
+	/**
+	 * @param <T>
+	 * @param needQueryCache
+	 * @param cacheRegion
+	 * @param chacheMode
+	 * @param hql
+	 * @param values
+	 * @return
+	 */
+	public <T> List<T> find(final boolean needQueryCache, final String cacheRegion, final CacheMode chacheMode,
+			String hql, Object... values) {
+		return createQuery(null, needQueryCache, cacheRegion, chacheMode, hql, values).list();
+	}
+
+	/**
+	 * @param <T>
+	 * @param needQueryCache
+	 * @param cacheRegion
+	 * @param chacheMode
+	 * @param hql
+	 * @param values
+	 * @return
+	 */
+	public <T> List<T> find(final LockOptions lockMode, final boolean needQueryCache, final String cacheRegion,
+			final CacheMode chacheMode, String hql, Object... values) {
+		return createQuery(lockMode, needQueryCache, cacheRegion, chacheMode, hql, values).list();
+	}
+
+	/**
+	 * 按Criteria查询对象列表.
+	 * 
+	 * @param criterions
+	 *            数量可变的Criterion.
+	 */
+	public <T> List<T> find(final Class entityClass, final Criterion... criterions) {
+		return createCriteria(entityClass, criterions).list();
+	}
+
+	/**
+	 * 按属性查找对象列表,匹配方式为相等.
+	 */
+	public <T> List<T> findBy(final Class entityClass, final String propertyName, final Object value) {
+		Criterion criterion = Restrictions.eq(propertyName, value);
+		return find(entityClass, criterion);
+	}
+
+	/**
+	 * 按id列表获取对象.
+	 */
+	public <T> List<T> findByIds(Class entityClass, List ids) {
+		return find(entityClass, Restrictions.in(getIdName(entityClass), ids));
+	}
+
+	/**
+	 * 按HQL查询唯一对象.
+	 * 
+	 * @param values
+	 *            命名参数,按名称绑定.
+	 */
+	public <T> T findUnique(final String hql, final Map<String, ?> values) {
+		return (T) createQuery(null, hql, values, false, null, null).uniqueResult();
+	}
+
+	/**
+	 * 按Criteria查询唯一对象.
+	 * 
+	 * @param criterions
+	 *            数量可变的Criterion.
+	 */
+	public <T> T findUnique(Class entityClass, final Criterion... criterions) {
+		return (T) createCriteria(entityClass, criterions).uniqueResult();
+	}
+
+	/**
+	 * 按HQL查询唯一对象.
+	 * 
+	 * @param values
+	 *            命名参数,按名称绑定.
+	 */
+	public <T> T findUnique(final String hql, final Object... values) {
+		return (T) createQuery(null, false, null, null, hql, values).uniqueResult();
+	}
+
+	/**
+	 * 按属性查找唯一对象, 匹配方式为相等.
+	 */
+	public <T> T findUniqueBy(Class entityClass, final String propertyName, final Object value) {
+		Assert.hasText(propertyName, "propertyName不能为空");
+		Criterion criterion = Restrictions.eq(propertyName, value);
+		return (T) createCriteria(entityClass, criterion).uniqueResult();
+	}
+
+	/**
+	 * 按HQL分页查询.
+	 * 
+	 * @param page
+	 *            分页参数. 注意不支持其中的orderBy参数.
+	 * @param hql
+	 *            hql语句.
+	 * @param values
+	 *            命名参数,按名称绑定.
+	 * 
+	 * @return 分页查询结果, 附带结果列表及所有查询输入参数.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Page<T> findPage(final Page<T> page, final String hql, final Map<String, ?> values) {
+		Assert.notNull(page, "page不能为空");
+
+		Query q = createQuery(hql, values);
+
+		if (page.isAutoCount()) {
+			long totalCount = countHqlResult(hql, values);
+			page.setTotalCount(totalCount);
+		}
+
+		setPageParameterToQuery(q, page);
+
+		List result = q.list();
+		page.setResult(result);
+		return page;
+	}
+
+	/**
+	 * 按HQL分页查询.
+	 * 
+	 * @param page
+	 *            分页参数.不支持其中的orderBy参数.
+	 * @param hql
+	 *            hql语句.
+	 * @param values
+	 *            数量可变的查询参数,按顺序绑定.
+	 * 
+	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
+	 */
+	public <T> Page<T> findPage(final Page<T> page, final String hql, final Object... values) {
+		Query q = createQuery(null, false, null, null, hql, values);
+
+		if (page.isAutoCount()) {
+			long totalCount = countHqlResult(hql, values);
+			page.setTotalCount(totalCount);
+		}
+
+		setPageParameterToQuery(q, page);
+		List result = q.list();
+		page.setResult(result);
+
+		return page;
+	}
+
+	/**
+	 * 按HQL分页查询.
+	 * 
+	 * @param page
+	 *            分页参数.不支持其中的orderBy参数.
+	 * @param hql
+	 *            hql语句.
+	 * @param values
+	 *            数量可变的查询参数,按顺序绑定.
+	 * 
+	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
+	 */
+	public <T> Page<T> findPage(final LockOptions lockMode, final Page<T> page, final String hql,
+			final Object... values) {
+		Query q = createQuery(lockMode, false, null, null, hql, values);
+
+		if (page.isAutoCount()) {
+			long totalCount = countHqlResult(hql, values);
+			page.setTotalCount(totalCount);
+		}
+
+		setPageParameterToQuery(q, page);
+		List result = q.list();
+		page.setResult(result);
+
+		return page;
+	}
+
+	/**
+	 * 按HQL分页查询.
+	 * 
+	 * @param page
+	 *            分页参数.不支持其中的orderBy参数.
+	 * @param hql
+	 *            hql语句.
+	 * @param values
+	 *            数量可变的查询参数,按顺序绑定.
+	 * 
+	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
+	 */
+
+	public <T> Page<T> findPage(final LockOptions lockMode, final boolean needQueryCache, final String cacheRegion,
+			final CacheMode chacheMode, final Page<T> page, final String hql, final Object... values) {
+		Query q = createQuery(lockMode, needQueryCache, cacheRegion, chacheMode, hql, values);
+
+		if (page.isAutoCount()) {
+			long totalCount = countHqlResult(hql, values);
+			page.setTotalCount(totalCount);
+		}
+
+		setPageParameterToQuery(q, page);
+		List result = q.list();
+		page.setResult(result);
+		return page;
+	}
+
+	/**
+	 * 按HQL分页查询.
+	 * 
+	 * @param page
+	 *            分页参数.不支持其中的orderBy参数.
+	 * @param hql
+	 *            hql语句.
+	 * @param values
+	 *            数量可变的查询参数,按顺序绑定.
+	 * 
+	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
+	 */
+
+	public <T> Page<T> findPage(final boolean needQueryCache, final String cacheRegion, final CacheMode chacheMode,
+			final Page<T> page, final String hql, final Object... values) {
+		Query q = createQuery(null, needQueryCache, cacheRegion, chacheMode, hql, values);
+
+		if (page.isAutoCount()) {
+			long totalCount = countHqlResult(hql, values);
+			page.setTotalCount(totalCount);
+		}
+
+		setPageParameterToQuery(q, page);
+		List result = q.list();
+		page.setResult(result);
+		return page;
+	}
+
+	/**
+	 * 按Criteria分页查询.
+	 * 
+	 * @param page
+	 *            分页参数.
+	 * @param criterions
+	 *            数量可变的Criterion.
+	 * 
+	 * @return 分页查询结果.附带结果列表及所有查询时的参数.
+	 */
+
+	public <T> Page<T> findPage(final Class entityClass, final Page<T> page, final Criterion... criterions) {
+		Criteria c = createCriteria(entityClass, criterions);
+
+		if (page.isAutoCount()) {
+			long totalCount = countCriteriaResult(c);
+			page.setTotalCount(totalCount);
+		}
+		setPageParameterToCriteria(c, page);
+		List result = c.list();
+		page.setResult(result);
+
+		return page;
+	}
+
+	/**
+	 * 按属性过滤条件列表分页查找对象.
+	 */
+	public <T> Page<T> findPage(final Class entityClass, final Page<T> page, final List<PropertyFilter> filters) {
+		Criterion[] criterions = buildCriterionByPropertyFilter(filters);
+
+		return findPage(entityClass, page, criterions);
+	}
+
+	/**
+	 * @param <T>
+	 * @param entityClass
+	 * @return
+	 */
+	public <T> List<T> findAll(Class entityClass) {
+		String queryString = new StringBuilder().append("from ").append(entityClass.getName()).toString();
+
+		return this.<T> find(queryString);
+	}
+
+	/**
+	 * 获取全部对象, 支持按属性行序.
+	 */
+	public <T> List<T> findAll(Class entityClass, String orderByProperty, boolean isAsc) {
+		Criteria c = createCriteria(entityClass);
+		if (isAsc) {
+			c.addOrder(Order.asc(orderByProperty));
+		} else {
+			c.addOrder(Order.desc(orderByProperty));
+		}
+
+		return c.list();
+	}
+
+	//==========================================SQL=============================================================//
+	public int executeSql(final String sql, final Object... values) {
+		SQLQuery queryObject = getSession().createSQLQuery(sql);
+
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				queryObject.setParameter(i, values[i]);
+			}
+		}
+
+		return queryObject.executeUpdate();
+	}
+
+	/**
+	 * <pre>
+	 * 根据指定的实体类、sql语句和sql参数列表，查询对象列表
+	 * 	示例:
+	 * 		String sql = "select * from cust where id = ? and sex = ? ";
+	 * 		List&lt;Cust&gt; custs = genericDao.findBySQL(Cust.class, sql, 100, 1);
+	 * </pre>
+	 * 
+	 * @param <T>
+	 *            实体类型
+	 * @param entityClass
+	 *            实体类, 如结果集不对应实体，填null即可
+	 * @param sql
+	 *            指定的sql语句
+	 * @param values
+	 *            参数列表
+	 * @return List&lt;T&gt; 实体列表
+	 */
+	public <T> List<T> findBySQLSimple(final Class entityClass, final String sql, final Object... values) {
+		SQLQuery queryObject = getSession().createSQLQuery(sql);
+
+		if (entityClass != null) {
+			queryObject.addEntity(entityClass);
+		}
+
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				queryObject.setParameter(i, values[i]);
+			}
+		}
+
+		return queryObject.list();
+	}
+
+	/**
+	 * 限制返回的对象的数量
+	 * 
+	 * @param maxCount
+	 * 
+	 * @param hql
+	 * 
+	 * @param values
+	 * 
+	 * @return
+	 */
+	public <T> List<T> findTop(final int maxCount, final String hql, final Object... values) {
+		Session session = this.getSession();
+		Query query = session.createQuery(hql);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				query.setParameter(i, values[i]);
+			}
+		}
+		query.setMaxResults(maxCount);
+
+		return query.list();
+	}
+
+	/**
+	 * 计算总数
+	 * 
+	 * @param entityClass
+	 * @param filters
+	 * @return
+	 */
+	public long count(final Class entityClass, final List<PropertyFilter> filters) {
+		Criterion[] criterions = buildCriterionByPropertyFilter(filters);
+		Criteria c = createCriteria(entityClass, criterions);
+		long totalCount = countCriteriaResult(c);
+
+		return totalCount;
+	}
+
+	/**
+	 * 根据hql语句查询
+	 * 
+	 * @param queryString
+	 * @param values
+	 * @return
+	 */
+	public QueryBuilder buildQuery(String queryString, Object... values) {
+		Query query = getSession().createQuery(queryString);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				query.setParameter(i, values[i]);
+			}
+		}
+		QueryBuilder builder = new QueryBuilder(query);
+
+		return builder;
+	}
+
+	// /**
+	// * 根据hql语句查询
+	// *
+	// * @param queryString
+	// * @param values
+	// * @return
+	// */
+	// public <T> QueryBuilder buildQuery(final Page<T> page ,String
+	// queryString, Object... values) {
+	// Query query = getSession().createQuery(queryString);
+	// if (values != null) {
+	// for (int i = 0; i < values.length; i++) {
+	// query.setParameter(i, values[i]);
+	// }
+	// }
+	// QueryBuilder builder = new QueryBuilder(query);
+	//		
+	// Assert.notNull(page, "page不能为空");
+	//
+	// Query q = createQuery(hql, values);
+	//
+	// if (page.isAutoCount()) {
+	// long totalCount = countHqlResult(hql, values);
+	// page.setTotalCount(totalCount);
+	// }
+	//
+	// setPageParameterToQuery(q, page);
+	//
+	// List result = q.list();
+	// page.setResult(result);
+	// return page;
+	//
+	// return builder;
+	// }
+
+	/**
+	 * 根据查询HQL与参数列表创建Query对象. 与find()函数可进行更加灵活的操作.
+	 * 
+	 * @param values
+	 *            数量可变的参数,按顺序绑定.
+	 */
+	public Query createQuery(final String queryString, final Object... values) {
+		return createQuery(null, false, null, null, queryString, values);
+	}
+
+	/**
+	 * 根据查询HQL与参数列表创建Query对象. 与find()函数可进行更加灵活的操作.
+	 * 
+	 * @param values
+	 *            命名参数,按名称绑定.
+	 */
+	public Query createQuery(final String queryString, final Map<String, ?> values) {
+		Assert.hasText(queryString, "queryString不能为空");
+		Query query = getSession().createQuery(queryString);
+		if (values != null) {
+			query.setProperties(values);
+		}
+		return query;
+	}
+
+	/**
+	 * 根据查询HQL与参数列表创建Query对象. .
+	 * 
+	 * @param lockMode
+	 * @param queryString
+	 * @param values
+	 *            命名参数,按名称绑定
+	 * @param needQueryCache
+	 * @param cacheRegion
+	 * @param chacheMode
+	 * 
+	 * @return
+	 */
+	public Query createQuery(final LockOptions lockMode, final String queryString, final Map<String, ?> values,
+			final boolean needQueryCache, final String cacheRegion, final CacheMode chacheMode) {
+		Query query = getSession().createQuery(queryString);
+		// 锁配置
+		if (lockMode != null) {
+			query.setLockOptions(lockMode);
+		}
+		// 缓存配置
+		if (needQueryCache) {
+			query.setCacheable(needQueryCache);
+
+			if (cacheRegion != null) {
+				query.setCacheRegion(cacheRegion);
+			}
+			if (chacheMode != null) {
+				query.setCacheMode(chacheMode);
+			}
+		}
+
+		if (values != null) {
+			query.setProperties(values);
+		}
+		return query;
+	}
+
+	/**
+	 * 根据查询HQL与参数列表创建Query对象.
+	 * 
+	 * 本类封装的find()函数全部默认返回对象类型为T,当不为T时使用本函数.
+	 * 
+	 * @param values
+	 *            数量可变的参数,按顺序绑定.
+	 */
+	public Query createQuery(final LockOptions lockMode, final boolean needQueryCache, final String cacheRegion,
+			final CacheMode chacheMode, final String queryString, final Object... values) {
+		Query query = getSession().createQuery(queryString);
+		// 是否加锁
+		if (lockMode != null) {
+			query.setLockOptions(lockMode);
+		}
+
+		// 缓存配置
+		if (needQueryCache) {
+			query.setCacheable(needQueryCache);
+
+			if (cacheRegion != null) {
+				query.setCacheRegion(cacheRegion);
+			}
+			if (chacheMode != null) {
+				query.setCacheMode(chacheMode);
+			}
+		}
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				query.setParameter(i, values[i]);
+			}
+		}
+		return query;
+	}
+
+	/**
+	 * 根据Criterion条件创建Criteria.
+	 * 
+	 * 本类封装的find()函数全部默认返回对象类型为T,当不为T时使用本函数.
+	 * 
+	 * @param criterions
+	 *            数量可变的Criterion.
+	 */
+	public Criteria createCriteria(final Class entityClass, final Criterion... criterions) {
+		Criteria criteria = getSession().createCriteria(entityClass);
+		for (Criterion c : criterions) {
+			criteria.add(c);
+		}
+
+		return criteria;
+	}
+
+	/**
+	 * 执行HQL进行批量修改/删除操作.
+	 */
+	public int batchExecute(final String hql, final Object... values) {
+		return createQuery(null, false, null, null, hql, values).executeUpdate();
+	}
+
+	/**
+	 * 执行HQL进行批量修改/删除操作.
+	 * 
+	 * @return 更新记录数.
+	 */
+	public int batchExecute(final String hql, final Map<String, ?> values) {
+		return createQuery(null, hql, values, false, null, null).executeUpdate();
+	}
+
+	/**
+	 * 判断对象的属性值在数据库内是否唯一.
+	 * 
+	 * 在修改对象的情景下,如果属性新修改的值(value)等于属性原来的值(orgValue)则不作比较.
+	 */
+	public boolean isPropertyUnique(Class entityClass, final String propertyName, final Object newValue,
+			final Object oldValue) {
+		if (newValue == null || newValue.equals(oldValue)) {
+			return true;
+		}
+		Object object = findUniqueBy(entityClass, propertyName, newValue);
+		return (object == null);
+	}
+
+	/**
+	 * 初始化对象. 使用load()方法得到的仅是对象Proxy, 在传到View层前需要进行初始化.
+	 * 只初始化entity的直接属性,但不会初始化延迟加载的关联集合和属性. 如需初始化关联属性,可实现新的函数,执行:
+	 * Hibernate.initialize(user.getRoles())，初始化User的直接属性和关联集合.
+	 * Hibernate.initialize
+	 * (user.getDescription())，初始化User的直接属性和延迟加载的Description属性.
+	 */
+	public void initProxyProperty(Object proxyProperty) {
+		Hibernate.initialize(proxyProperty);
+	}
+
+	/**
+	 * @param entity
+	 * @param lockMode
+	 * @param timeOut
+	 * @param isLockScope
+	 */
+	public void lock(Object entity, LockOptions lockMode, int timeOut, boolean isLockScope) {
+		LockRequest lockRequest = getSession().buildLockRequest(lockMode);
+		lockRequest.setTimeOut(timeOut).setScope(isLockScope).lock(entity);
+	}
+
+	/**
+	 * @param entity
+	 * @param locikMode
+	 */
+	public void refresh(Object entity, LockOptions lockMode) {
+		getSession().refresh(entity, lockMode);
+	}
+
+	/**
+	 * 
+	 */
+	public void clear() {
+		getSession().clear();
+	}
+
+	/**
+	 * Flush当前Session.
+	 */
+	public void flush() {
+		getSession().flush();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.team.cmc.infrastructure.persistence.hibernate.I#contains(java.lang
+	 * .Object)
+	 */
+	public boolean contains(Object entity) {
+		return getSession().contains(entity);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.team.cmc.infrastructure.persistence.hibernate.I#evict(java.lang.Object
+	 * )
+	 */
+	public void evict(Object entity) {
+		getSession().evict(entity);
+	}
+
+	/**
+	 * 为Query添加distinct transformer.
+	 */
+	public Query distinct(Query query) {
+		query.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		return query;
+	}
+
+	/**
+	 * 为Criteria添加distinct transformer.
+	 */
+	public Criteria distinct(Criteria criteria) {
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		return criteria;
+	}
+
+	/**
+	 * 取得对象的主键名.
+	 */
+	public String getIdName(Class entityClass) {
+		ClassMetadata meta = getSessionFactory().getClassMetadata(entityClass);
+		return meta.getIdentifierPropertyName();
+	}
+
+	/**
+	 * 执行count查询获得本次Hql查询所能获得的对象总数.
+	 * 
+	 * 本函数只能自动处理简单的hql语句,复杂的hql查询请另行编写count语句查询.
+	 */
+	protected long countHqlResult(final String hql, final Map<String, ?> values) {
+		String countHql = prepareCountHql(hql);
+
+		try {
+			Long count = findUnique(countHql, values);
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException("hql can't be auto count, hql is:" + countHql, e);
+		}
+	}
+
+	/**
+	 * 执行count查询获得本次Hql查询所能获得的对象总数.
+	 * 
+	 * 本函数只能自动处理简单的hql语句,复杂的hql查询请另行编写count语句查询.
+	 */
+	protected long countHqlResult(final String hql, final Object... values) {
+		String countHql = prepareCountHql(hql);
+
+		try {
+			Long count = findUnique(countHql, values);
+			return count;
+		} catch (Exception e) {
+			throw new RuntimeException("hql can't be auto count, hql is:" + countHql, e);
+		}
+	}
+
+	private String prepareCountHql(String orgHql) {
+		String fromHql = orgHql;
+		// select子句与order by子句会影响count查询,进行简单的排除.
+		fromHql = "from " + StringUtils.substringAfter(fromHql, "from");
+		fromHql = StringUtils.substringBefore(fromHql, "order by");
+		String countHql = "select count(*) " + fromHql;
+
+		return countHql;
+	}
+
+	/**
+	 * 执行count查询获得本次Criteria查询所能获得的对象总数.
+	 */
+	protected long countCriteriaResult(final Criteria c) {
+		CriteriaImpl impl = (CriteriaImpl) c;
+
+		// 先把Projection、ResultTransformer、OrderBy取出来,清空三者后再执行Count操作
+		Projection projection = impl.getProjection();
+		ResultTransformer transformer = impl.getResultTransformer();
+
+		List<CriteriaImpl.OrderEntry> orderEntries = null;
+		try {
+			orderEntries = (List) ReflectionUtils.getFieldValue(impl, "orderEntries");
+			ReflectionUtils.setFieldValue(impl, "orderEntries", new ArrayList());
+		} catch (Exception e) {
+			logger.error("不可能抛出的异常:{}", e.getMessage());
+		}
+
+		// 执行Count查询
+		Long totalCountObject = (Long) c.setProjection(Projections.rowCount()).uniqueResult();
+		long totalCount = (totalCountObject != null) ? totalCountObject : 0;
+
+		// 将之前的Projection,ResultTransformer和OrderBy条件重新设回去
+		c.setProjection(projection);
+
+		if (projection == null) {
+			c.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
+		}
+		if (transformer != null) {
+			c.setResultTransformer(transformer);
+		}
+		try {
+			ReflectionUtils.setFieldValue(impl, "orderEntries", orderEntries);
+		} catch (Exception e) {
+			logger.error("不可能抛出的异常:{}", e.getMessage());
+		}
+
+		return totalCount;
+	}
+
+	/**
+	 * 设置分页参数到Query对象,辅助函数.
+	 */
+	protected <T> Query setPageParameterToQuery(final Query q, final Page<T> page) {
+		// hibernate的firstResult的序号从0开始
+		q.setFirstResult(page.getFirst() - 1);
+		q.setMaxResults(page.getPageSize());
+
+		return q;
+	}
+
+	/**
+	 * 设置分页参数到Criteria对象,辅助函数.
+	 */
+	protected <T> Criteria setPageParameterToCriteria(final Criteria c, final Page<T> page) {
+		// hibernate的firstResult的序号从0开始
+		c.setFirstResult(page.getFirst() - 1);
+		c.setMaxResults(page.getPageSize());
+
+		if (page.isOrderBySetted()) {
+			String[] orderByArray = StringUtils.split(page.getOrderBy(), ',');
+			String[] orderArray = StringUtils.split(page.getOrder(), ',');
+
+			Assert.isTrue(orderByArray.length == orderArray.length, "分页多重排序参数中,排序字段与排序方向的个数不相等");
+
+			for (int i = 0; i < orderByArray.length; i++) {
+				if (Page.ASC.equals(orderArray[i])) {
+					c.addOrder(Order.asc(orderByArray[i]));
+				} else {
+					c.addOrder(Order.desc(orderByArray[i]));
+				}
+			}
+		}
+
+		return c;
+	}
+
+	/**
+	 * 按属性条件列表创建Criterion数组,辅助函数.
+	 */
+	protected Criterion[] buildCriterionByPropertyFilter(final List<PropertyFilter> filters) {
+		List<Criterion> criterionList = new ArrayList<Criterion>();
+		for (PropertyFilter filter : filters) {
+			if (!filter.hasMultiProperties()) { // 只有一个属性需要比较的情况.
+				Criterion criterion = buildCriterion(filter.getPropertyName(), filter.getMatchValue(),
+						filter.getMatchType());
+				criterionList.add(criterion);
+			} else {// 包含多个属性需要比较的情况,进行or处理.
+				Disjunction disjunction = Restrictions.disjunction();
+				for (String param : filter.getPropertyNames()) {
+					Criterion criterion = buildCriterion(param, filter.getMatchValue(), filter.getMatchType());
+					disjunction.add(criterion);
+				}
+				criterionList.add(disjunction);
+			}
+		}
+		return criterionList.toArray(new Criterion[criterionList.size()]);
+	}
+
+	/**
+	 * 按属性条件参数创建Criterion,辅助函数.
+	 */
+	protected Criterion buildCriterion(final String propertyName, final Object propertyValue, final MatchType matchType) {
+		Assert.hasText(propertyName, "propertyName不能为空");
+		Criterion criterion = null;
+		// 根据MatchType构造criterion
+		switch (matchType) {
+		case EQ:
+			criterion = Restrictions.eq(propertyName, propertyValue);
+			break;
+		case LIKE:
+			criterion = Restrictions.like(propertyName, (String) propertyValue, MatchMode.ANYWHERE);
+			break;
+		case LE:
+			criterion = Restrictions.le(propertyName, propertyValue);
+			break;
+		case LT:
+			criterion = Restrictions.lt(propertyName, propertyValue);
+			break;
+		case GE:
+			criterion = Restrictions.ge(propertyName, propertyValue);
+			break;
+		case GT:
+			criterion = Restrictions.gt(propertyName, propertyValue);
+			break;
+		case ISNULL:
+			criterion = Restrictions.isNull(propertyName);
+			break;
+		case ISNOTNULL:
+			criterion = Restrictions.isNotNull(propertyName);
+		}
+		return criterion;
+	}
+
+	/**
+	 * <pre>
+	 * Bzuilder模式
+	 * @author chenwentao
+	 *
+	 * @version 0.9
+	 *
+	 * 修改版本: 0.9
+	 * 修改日期: May 11, 2011
+	 * 修改人 :  chenwentao
+	 * 修改说明: 初步完成
+	 * 复审人 ：
+	 * </pre>
+	 */
+	public static class QueryBuilder {
+
+		private Query query;
+
+		public QueryBuilder(Query query) {
+			this.query = query;
+		}
+
+		public QueryBuilder lock(LockOptions lockOptions) {
+			Assert.notNull(lockOptions, "lockOptions不能为空");
+			query.setLockOptions(lockOptions);
+			return this;
+		}
+
+		public QueryBuilder setQueryCache(boolean needQueryCache) {
+			query.setCacheable(needQueryCache);
+			return this;
+		}
+
+		public QueryBuilder setCacheRegion(String cacheRegion) {
+			query.setCacheRegion(cacheRegion);
+			return this;
+		}
+
+		public QueryBuilder setCahceMode(CacheMode cacheMode) {
+			query.setCacheMode(cacheMode);
+			return this;
+		}
+
+		public Query build() {
+			return query;
+		}
+
+		public <T> List<T> list() {
+			return query.list();
+		}
+
+	}
+
+	// TODO 补充FetchMode
+	// /**
+	// * .setFetchMode("mate", FetchMode.EAGER) .setFetchMode("kittens",
+	// * FetchMode.EAGER)
+}

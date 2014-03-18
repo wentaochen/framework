@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/infrastructure/!svn/ver/32/trunk/.settings
+END
+org.eclipse.jdt.core.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/infrastructure/!svn/ver/47/trunk/.settings/org.eclipse.jdt.core.prefs
+END
+org.eclipse.core.resources.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/infrastructure/!svn/ver/32/trunk/.settings/org.eclipse.core.resources.prefs
+END
+org.maven.ide.eclipse.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/infrastructure/!svn/ver/32/trunk/.settings/org.maven.ide.eclipse.prefs
+END

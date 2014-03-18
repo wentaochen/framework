@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/java=GBK
+encoding//src/main/resources=GBK
+encoding//src/test/java=GBK
+encoding//src/test/resources=GBK
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.6
+org.eclipse.jdt.core.compiler.compliance=1.6
+org.eclipse.jdt.core.compiler.problem.forbiddenReference=warning
+org.eclipse.jdt.core.compiler.source=1.6

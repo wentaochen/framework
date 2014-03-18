@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/staticize
+END
+FileServletOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/staticize/FileServletOutputStream.java
+END
+StaticizeFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/staticize/StaticizeFilter.java
+END
+PageClearer.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/staticize/PageClearer.java
+END
+StaticizeResponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/interfaces/!svn/ver/3/trunk/src/main/java/com/framework/interfaces/web/staticize/StaticizeResponse.java
+END

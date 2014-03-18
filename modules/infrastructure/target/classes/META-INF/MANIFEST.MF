@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Built-By: chenwentao
+Build-Jdk: 1.6.0_10-rc2
+Specification-Title: framework-infrastructure's infrastructure Module
+Specification-Version: 1.2.3
+Specification-Vendor: framework
+Implementation-Title: framework-infrastructure's infrastructure Module
+Implementation-Version: 1.2.3
+Implementation-Vendor-Id: com.framework
+Implementation-Vendor: framework
+Created-By: Maven Integration for Eclipse
+
