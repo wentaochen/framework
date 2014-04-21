@@ -1181,9 +1181,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-  <modules>
-    <module>framework-showcase</module>
-    <module>framework-weixin</module>
-    <module>weixin</module>
-  </modules>
 </project>
