@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="false"
+	xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- 控制台 -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyyMMdd-HH:mm:ss,SSS} [%p][%l]  %m%n" />
+		</layout>
+	</appender>
+
+	<!--错误处理 -->
+	<appender name="error" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/weixin/logs/error.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyMMdd-HH:mm:ss,SSS} [%p][%c]  %m%n" />
+		</layout>
+	</appender>
+
+	<!-- controller错误 -->
+	<appender name="controllerErrorFile" class="org.apache.log4j.DailyRollingFileAppender">
+	  	<param name="Encoding" value="UTF-8" />  
+		<param name="File" value="/weixin/logs/controllerErrorFile.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyMMdd-HH:mm:ss,SSS} [%p][%c]  %m%n" />
+		</layout>
+	</appender>
+	
+	<!-- ServiceAOPException错误 -->
+	<appender name="serviceErrorFile" class="org.apache.log4j.DailyRollingFileAppender">
+		 <param name="Encoding" value="UTF-8" />  
+		<param name="File" value="/weixin/logs/serviceErrorFile.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyMMdd-HH:mm:ss,SSS} [%p][%c]  %m%n" />
+		</layout>
+	</appender>
+
+
+	<!-- 500错误 -->
+	<appender name="500file" class="org.apache.log4j.DailyRollingFileAppender">
+	  	<param name="Encoding" value="UTF-8" />  
+		<param name="File" value="/weixin/logs/500.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyMMdd-HH:mm:ss,SSS} [%p][%c]  %m%n" />
+		</layout>
+	</appender>
+
+	<!-- ControllerAOPException  -->
+	<logger name="ControllerAOPException" additivity="false">
+		<level value="info" />
+		<appender-ref ref="controllerErrorFile" />
+	</logger>
+	
+	<!-- ServiceAOPException  -->
+	<logger name="ServiceAOPException" additivity="false">
+		<level value="info" />
+		<appender-ref ref="serviceErrorFile" />
+	</logger>
+	
+
+	<logger name="500.jsp" additivity="false">
+		<level value="info" />
+		<appender-ref ref="500file" />
+	</logger>
+
+	<logger name="weixin" additivity="false">
+		<level value="info" />
+		<appender-ref ref="console" />
+	</logger>
+
+	<root>
+		<level value="error" />
+		<appender-ref ref="error" />
+	</root>
+</log4j:configuration>

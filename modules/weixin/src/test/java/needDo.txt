@@ -1,0 +1,2 @@
+guanzhuxweixin:
+weixin://contacts/profile/gh_a5d73d8f9833
