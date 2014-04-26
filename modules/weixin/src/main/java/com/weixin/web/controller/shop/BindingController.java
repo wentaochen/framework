@@ -33,6 +33,14 @@ public class BindingController {
 	@Inject
 	private MemberService memberService;
 
+	/**
+	 * 调整到注册页面
+	 * 
+	 * @param openid
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/binding/{openid}", produces = "text/html;charset=UTF-8")
 	public String bindingForm(@PathVariable("openid") String openid, Model model)
 			throws IOException {
@@ -46,6 +54,15 @@ public class BindingController {
 		return Config.VIEWS_SHOP + "register";
 	}
 
+	/**
+	 * 创建绑定页面
+	 * 
+	 * @param session
+	 * @param member
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/binding", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
 	@ResponseBody
 	public String createMember(HttpSession session, Member member, Model model)

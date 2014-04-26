@@ -1,5 +1,11 @@
 K 25
 svn:wc:ra_dav:version-url
-V 51
-/svn/infrastructure/!svn/ver/40/trunk/src/main/java
+V 53
+/svn/infrastructure/!svn/ver/32/trunk/src/main/config
+END
+checkstyle_springside.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/infrastructure/!svn/ver/32/trunk/src/main/config/checkstyle_springside.xml
 END

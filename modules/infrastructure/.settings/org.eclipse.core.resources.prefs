@@ -1,8 +1,9 @@
 eclipse.preferences.version=1
 encoding//src/main/java=GBK
+encoding//src/main/java/com/framework/infrastructure/mapper/BeanMapper.java=GBK
 encoding//src/main/java/com/framework/infrastructure/persistence/Page.java=GBK
 encoding//src/main/java/com/framework/infrastructure/utils/JettyUtils.java=GBK
 encoding//src/main/resources=utf-8
 encoding//src/test/java=GBK
 encoding//src/test/resources=utf-8
-encoding/<project>=GBK
+encoding/<project>=UTF-8

@@ -20,15 +20,28 @@
 	</context:component-scan>
 
 	<mvc:annotation-driven>
-		<mvc:message-converters>
+			<mvc:message-converters register-defaults="false">
+			<bean
+				class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<value>text/html;charset=UTF-8</value>
-					</list>
-				</property>
+				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+			</bean>
+			<bean
+				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
 			</bean>
 		</mvc:message-converters>
+		<!--   
+		<mvc:message-converters>
+			 <bean class = "org.springframework.http.converter.StringHttpMessageConverter">   
+                <property name = "supportedMediaTypes">
+                      <list>
+                          <value>text/html;charset=UTF-8</value>   
+                     </list>   
+                </property>   
+             </bean>  
+		</mvc:message-converters>
+		-->
 	</mvc:annotation-driven>
 
 	<!-- <mvc:resources location="/static/" mapping="/static/**" cache-period="31556926"/> -->
