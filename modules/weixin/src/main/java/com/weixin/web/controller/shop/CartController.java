@@ -1,6 +1,7 @@
 package com.weixin.web.controller.shop;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.weixin.domain.model.shop.Cart;
 import com.weixin.domain.model.shop.Product;
+import com.weixin.domain.model.shop.ProductType;
 import com.weixin.domain.service.shop.ProductService;
+import com.weixin.domain.service.shop.ProductTypeService;
 import com.weixin.infra.Config;
 
 @Controller
@@ -22,6 +25,9 @@ public class CartController {
 
 	@Inject
 	private ProductService productService;
+
+	@Inject
+	private ProductTypeService productTypeService;
 
 	/**
 	 * 产品加入购物车
@@ -51,8 +57,19 @@ public class CartController {
 		return "ok";
 	}
 
+	/**
+	 * 进入到商品选购页面
+	 * 
+	 * @param session
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/list")
 	public String carList(HttpSession session, Model model) throws IOException {
+		List<ProductType> types = productTypeService.findAll();
+		model.addAttribute("types", types);
+
 		return Config.VIEWS_SHOP + "cartList";
 	}
 

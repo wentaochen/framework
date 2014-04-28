@@ -1,45 +1,76 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<!DOCTYPE html>
+
+<!doctype html>
+<html>
 <head>
-<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0"/>
+<meta name="Description" content="网站描述">
+<meta name="Keywords" content="关键字">
+<meta name="copyright" content="版权声明" />
 <c:set var="title" value="购物车" />
-<%@include file="/WEB-INF/views/commons/meta.jsp"%>
-</head>
+<title>${title}</title>
+<!--[if lt IE 9]>
+	<script src="${ctx}/static/shop/js/css3-mediaqueries.js"></script>
+	<script src="${ctx}/static/shop/js/html5.js"></script>
+<![endif]-->
+
+<link href="${ctx}/static/shop/css/main.css" rel="stylesheet" type="text/css">
+<link href="${ctx}/static/shop/css/font-awesome.min.css" rel="stylesheet" >
+<!--[if IE 7]>
+  <link rel="stylesheet" href="${ctx}/static/shop/css/font-awesome-ie7.min.css">
+<![endif]-->
+
+<script src="${ctx}/static/shop/js/jquery.min.1.7.1.js" type="text/javascript"></script>
+<script src="${ctx}/static/shop/js/alpha_bg.js" type="text/javascript"></script>
+<script src="${ctx}/static/shop/js/jquery.scrollTo.js" type="text/javascript"></script>
+<script src="${ctx}/static/shop/js/jquery.nav.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/shop/js/core.js" type="text/javascript"></script>
+
+
 <script type="text/javascript">
-	function deleteCartItem(id) {
-		var url = "${ctx}/cart/add/" + id;
-		$.ajax({
-			url : url,
-			type : 'GET',
-			dataType : "html",
-			cache : false,
-			success : function(html) {
-				if (html == "ok") {
-					$("#deleteSuccess").fadeIn("slow");
-				}
-			}
-		});
-	}
-	
-	function clearCart() {
-		var url = "${ctx}/cart/clear";
-		$.ajax({
-			url : url,
-			type : 'GET',
-			dataType : "html",
-			cache : false,
-			success : function(html) {
-				if (html == "ok") {
-					alert("添加成功");
-				}
-			}
-		});
-	}
+var map = new HashMap();  
+
+  
+  
+map.put(1,"小张");  
+map.put(2,"小名");  
+alert(map.get(1));  
+alert(map.get(2));  
+map.remove("xxxxx");  
+alert(map.size());  
+
+
+$(document).ready(function(){
+	$('#nav').onePageNav({
+		filter: ':not(.external)',
+		scrollThreshold: 0.25
+	});
+});
 </script>
+ 
+<script type="text/javascript" src="${ctx}/static/shop/js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="${ctx}/static/shop/js/sexylightbox.v2.3.jquery.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      SexyLightbox.initialize({color:'white', dir: 'sexyimages'});
+    });
+  </script>
 </head>
+
 <body>
-<%@include file="/WEB-INF/views/commons/header.jsp"%>
+ <header>
+  <h1 class="toptitle"><a href="${ctx}/"><i class="icon-angle-left"></i>Jet的水果铺</a></h1>
+  <ul class="top_ico">
+    <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
+    <li><a href="${ctx}/member"><i class="icon-user"></i></a></li>
+    <li><i class="icon-reorder"></i></li>
+  </ul>
+ </header>
+ 
 <div id="search_bar" data-reveal-id="myModal">
     <div class="searchBox">
         <i class="icon-search"></i>
@@ -47,399 +78,419 @@
     </div>
     <input name="完成" type="button" class="ok_butt" value="确定" >
 </div>
-
-<div class="posit_box">
- 
- <!--公告开始-->
+<!--公告开始-->
  <div id="notice">
     <i class="icon-volume-down float_left"></i> 
     <span>这里是公告文字</span> 
     <div id="ico_close"><i class="icon-remove"></i></div>
  </div>
  <!--公告end-->
+<div class="posit_box">
+ 
+ 
  <!--左侧tab栏目分类代码开始-->
  <div class="left_tab" id="lanxx">
    <div id="search" data-reveal-id="search_bar"><i class="icon-search"></i></div> 
-   <ul class="nav-list">
-      <li class="active"><a href="#fl_list01">今日特惠<span class="navbar-unread">1</span></a></li>
-      <li><a href="#fl_list02">店长推荐</a></li>
-      <li><a href="#fl_list03">销售冠军</a></li>
-      <li><a href="#fl_list04">奶茶</a></li>
-      <li><a href="#fl_list05">西点/糕点</a></li>
+   <ul class="nav-list" id="nav" >
+   	   <c:forEach items="${types}"  var="item" varStatus="s">
+   	   			 <li <c:if test="${s.first}"> class="current" </c:if> ><a href="#section-${item.id}">${item.name}</a></li>
+   	   </c:forEach>
+   		
+   	  <!--   
+      <li class="current"><a href="#section-1">今日特惠<span class="navbar-unread">1</span></a></li>
+      <li><a href="#section-2">店长推荐</a></li>
+      <li><a href="#section-3">销售冠军</a></li>
+      <li><a href="#section-4">奶茶</a></li>
+      <li><a href="#section-5">西点/糕点</a></li>
+     -->
    </ul>
  </div>
  <!--左侧tab栏目分类代码结束-->
  </div>
  <!--右侧列表代码开始-->
  <div class="right_list" id="wrapper">
-    <div id="scroller">
-    
-        <section id="fl_list01">
-         <h2 class="fltitle">今日特惠</h2>
+     <c:forEach items="${types}"  var="item" varStatus="s">
+   	   			 <div class="section" id="section-${item.id}">
+				 <h2 class="fltitle">${item.name}</h2>
+		         <ul id="thelist">
+		         
+		         		 <c:forEach items="${item.products}"  var="product" begin="1" varStatus="varStatus">
+				   	   			   <li class="goodsitem" data-goodsid="${varStatus.count}">
+						             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="${product.name}">
+						              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+						              <h3>${product.name}</h3>
+						              <p>已售20份<span>3人赞过</span></p>
+						              <p class="jiaqian">￥10<span>14</span></p>
+						              </a>
+						              <div class="tjia">
+						                <input type="hidden" class="max" value="30" />
+						                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
+						                <div class="shuzi hide">0</div>
+						                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+						              </div>
+						           </li>  
+				   	     </c:forEach>
+				   	     
+		         </ul>
+				</div>
+   	</c:forEach>
+     
+ <%-- 
+	<div class="section" id="section-1">
+		<h2 class="fltitle">今日特惠</h2>
          <ul id="thelist">
            
-           <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+           <li class="goodsitem" data-goodsid="1">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果1">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果1</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>  
 		</ul>
-        </section>
-        
-        <section id="fl_list02">
-        <h2 class="fltitle">店长推荐</h2>
+	</div>
+
+	<div class="section" id="section-2">
+		<h2 class="fltitle">店长推荐</h2>
          <ul id="thelist">
            
-           <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+           <li class="goodsitem" data-goodsid="2">
+             <a href="${ctx}/static/shop/img/list_img2.jpg" rel="sexylightbox[group1]" title="香辣肥肠">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img2.jpg"></div>
+              <h3>香辣肥肠</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />
   		        
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="3">
+              <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果3">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果3</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />       
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="4">
+            <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果4">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果4</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="5">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果5">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果5</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="6">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果6">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果6</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
 		</ul>
-        </section>
-        
-        <section id="fl_list03">
-        <h2 class="fltitle">销售冠军</h2>
+	</div>
+
+	<div class="section" id="section-3">
+		<h2 class="fltitle">销售冠军</h2>
          <ul id="thelist">
            
-           <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+           <li class="goodsitem" data-goodsid="7">
+              <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果7">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果7</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />
   		        
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果8">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果8</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />       
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果9">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果9</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果10">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果10</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果11">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果11</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
 		</ul>
-        </section>
-        
-       <section id="fl_list04">
-        <h2 class="fltitle">奶茶</h2>
+	</div>
+
+	<div class="section" id="section-4">
+		<h2 class="fltitle">奶茶</h2>
          <ul id="thelist">
            
-           <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+           <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果12">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果12</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
-              <div class="tjia">
-                <input type="hidden" class="max" value="30" />
-                 <div class="minus hide"><i class="icon-minus"></i></div>
-                <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
-              </div>
-            </li>
-            
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
-              <p>已售12份<span>3人赞过</span></p>
-              <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />       
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果13">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果13</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果14">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果14</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果15">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果15</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+              </div>
+            </li>
+            
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果16">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果16</h3>
+              <p>已售12份<span>3人赞过</span></p>
+              <p class="jiaqian">￥10<span>14</span></p>
+              </a>
+              <div class="tjia">
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
+                <div class="shuzi hide">0</div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
 		</ul>
-        </section>
-        
-        <section id="fl_list05">
-        <h2 class="fltitle">西点/糕点</h2>
+	</div>
+
+	<div class="section" id="section-5">
+		<h2 class="fltitle">西点/糕点</h2>
          <ul id="thelist">
            
-           <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+           <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果17">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果17</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
-              <div class="tjia">
-                <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
-                <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
-              </div>
-            </li>
-            
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
-              <p>已售12份<span>3人赞过</span></p>
-              <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
                 <input type="hidden" class="max" value="30" />       
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果18">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果18</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果19">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果19</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
-            <li>
-              <div class="photo"><img src="images/list_img.jpg"></div>
-              <h3>美味水果</h3>
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果20">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果20</h3>
               <p>已售12份<span>3人赞过</span></p>
               <p class="jiaqian">￥10<span>14</span></p>
+              </a>
               <div class="tjia">
-                <input type="hidden" class="max" value="30" />      
-                <div class="minus hide"><i class="icon-minus"></i></div>
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
                 <div class="shuzi hide">0</div>
-                <div class="plus"><i class="icon-plus"></i></div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+              </div>
+            </li>
+            
+            <li class="goodsitem" data-goodsid="8">
+             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="美味水果21">
+              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
+              <h3>美味水果21</h3>
+              <p>已售12份<span>3人赞过</span></p>
+              <p class="jiaqian">￥10<span>14</span></p>
+              </a>
+              <div class="tjia">
+                <input type="hidden" class="max" value="30" />       
+                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
+                <div class="shuzi hide">0</div>
+                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
               </div>
             </li>
             
 		</ul>
-       </section>
-     </div>
+	</div>
+--%>
   </div>
  
-<div id="foot_box">
+<div id="foot_box" style="display:none;">
   <ul class="bott_list">
-    <li class="xzli">
-      <span>菜单名字1</span>
-       <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"><i class="icon-plus"></i></div>
-      </div>
-    </li>
-    <li class="xzli">
-      <span>菜单名字2</span>
-       <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"><i class="icon-plus"></i></div>
-      </div>
-    </li>
-    
-    <li class="xzli">
-      <span>菜单名字3</span>
-       <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"><i class="icon-plus"></i></div>
-      </div>
-    </li>
-    
-    <li class="xzli">
-      <span>菜单名字4</span>
-       <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"><i class="icon-plus"></i></div>
-      </div>
-    </li>
-    
-    <li class="xzli">
-      <span>菜单名字5</span>
-       <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"><i class="icon-plus"></i></div>
-      </div>
-    </li>
   </ul>
   
   <div class="heji_box">总计：￥132.0/5个菜</div>
@@ -449,6 +500,20 @@
     <div class="bott_zhankai"><i class="icon-angle-up"></i><i class="icon-angle-down" style="display:none;"></i></div>
   </div>
 </div>
+<!-- 底部菜单模版文件-->
+<ul id="footer-list-template" style="display:none;">
+ <li class="xzli goodsitem">
+      <span></span>
+       <div class="tjia2">
+           <p class="jiage">￥10</p>
+           <input type="hidden" class="max2" value="30" />
+           <div class="minus2"  onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
+           <div class="shuzi2">1</div>
+           <div class="plus2"  onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+      </div>
+    </li>
+</ul>
+</body>
 
 <script type="text/javascript">
 //页脚展开关闭代码
@@ -459,6 +524,7 @@ if ( $("#foot_box").css("display")=="none" ){
 };
 $("#ico_close").click(function(){
 		$("#notice").css({ "display": "none"});
+		$(".posit_box").css({ "top": "53px"});
 	    if ( $("#foot_box").css("display")=="none" ){ 
 		   $(".right_list").css({ "top": "53px","bottom": "0px"});
 		}else{
@@ -489,22 +555,6 @@ $(".bott_zhankai").click(function(){
 });
 
 
-//滚动区的JS
-var myScroll;
-function loaded() {
-	myScroll = new iScroll("wrapper");
-}
-
-document.addEventListener("touchmove", function (e) { e.preventDefault(); }, false);
-
-/* * * * * * * *
- *
- * Use this for high compatibility (iDevice + Android)
- *
- */
-document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 200); }, false);
-/*
- * * 滚动区的JS* * */
  
  
 </script>
@@ -513,32 +563,54 @@ document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 2
 /**
 加减运算
 **/  
-  	$(".plus,.plus2").click(function(){
-        changeNum(this,"+");
-    })
-  	$(".minus,.minus2").click(function(){
-        changeNum(this,"-");
-    })
+	function addOrderList(tjia){
+		var _parent=$(tjia).parents('.goodsitem');
+		var _goodsid = _parent.attr('data-goodsid');
+		var _targetGoods=$('.bott_list li[data-goodsid='+_goodsid+']');
+		if(_targetGoods.length>0){
+			return;
+		}else{
+			//商品标题
+			var title = _parent.find('h3').html();
+			$template = $('#footer-list-template li').clone().attr('data-goodsid',_goodsid);
+			//添加商品标题
+			$template.children('span').html(title)
+			$template.appendTo($('.bott_list'));
+		}
+	}
+	function removeOrderList(tjia){
+		var _goodsid = $(tjia).parents('.goodsitem').attr('data-goodsid');
+		var _targetGoods=$('.bott_list li[data-goodsid='+_goodsid+']');
+		if(_targetGoods.length>0){
+			_targetGoods.remove();
+		}
+	}
   	function filterNum(_parent,num,min,max,handle){
   		if(isNaN(num)){
   			num=0;
   		}
   		$(".minus,.shuzi,.plus",_parent).removeClass("hide");
+		if(_parent.is('.tjia')){
+			addOrderList(_parent);
+		}
+		
+		
+
+	  	 $("#foot_box").css({ "display": "block"});
+	  	 $(".right_list").css({ "bottom": "50px"});	
   		if(num<=min){//判断值
 			
   			$(".minus,.shuzi",_parent).addClass("hide");
-		    $(".minus2",_parent).parent().parent().remove();//删除当前对象的祖父级
+			removeOrderList(_parent);
+			
+		    _parent.parents('.xzli').remove();//删除当前对象的祖父级
 			
                   			  
 				   if ( $(".bott_list li").length < 1 ){//判断对象是否为空
 	   	                   $(".bott_list").css({ "display": "none"});
 						   $("#foot_box").css({ "display": "none"});
 						   $(".right_list").css({ "bottom": "0px"});						   
-	               }else {
-                           $(".bott_list").css({ "display": "block"});
-						   $("#foot_box").css({ "display": "block"});
-						   $(".right_list").css({ "bottom": "50px"});	
-                   };//判断选中外卖总合的一些条件逻辑
+	               }
 				   
 				  if ( $("#foot_box").css("display")=="none" ){//判断对象是否为空
 	   	                 
@@ -572,7 +644,6 @@ document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 2
        var shuziElem = _parent.find(".shuzi,.shuzi2");
        var max = _parent.find(".max,.max2").val();
        var _shuzi = parseInt(shuziElem.html());
-      console.log(type);
       if(type=="+"){
         _shuzi++;
       }else{
@@ -580,67 +651,13 @@ document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 2
       }
      
       filterNum(_parent,_shuzi,0,max,function(num){
-        shuziElem.html(num);
+        var _goodsid = _parent.parents('.goodsitem').attr('data-goodsid');
+		var _targetElem = $('li[data-goodsid='+_goodsid+']');
+		_targetElem.find(".shuzi,.shuzi2").html(num);
+		if(num<=0){
+		$('.tjia',_targetElem).find('.minus,.shuzi').addClass('hide');
+		}
       });
   	}
   </script>
-	<!--  
-	<div class="bs-docs-example">
-	    <c:choose>
-	   <c:when test="${sessionScope.cart.products!=null && fn:length(sessionScope.cart.products)>0}">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>名称</th>
-					<th>数量</th>
-					<th>价格</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${sessionScope.cart.products}" var="entry">
-					<c:set value="${entry.value}" var="item"/>
-					<tr>
-						<td>
-							${item.product.name}
-						</td>
-						<td>
-							 ${item.count}
-						</td>
-						<td>
-							 ${item.count*item.product.price}/元
-						</td>
-						<td>
-							<input type="button" class="btn btn-primary" onclick="deleteCartItem('${item.id}')"
-							value="删除">
-						</td>
-					</tr>
-				</c:forEach>
-					<tr>
-						<td>
-							 总价:${sessionScope.cart.totalCount}
-						</td>
-						<td>
-						</td>
-						<td>
-							<a href="${ctx}/order/confirm" class="btn btn-primary">确认订单</a>
-						</td>
-						<td>
-								<a href="${ctx}/cart/clear" class="btn btn-primary">清空购物车</a>
-						</td>
-					</tr>
-			</tbody>
-		</table>
-		 </c:when>
-		 		   <c:otherwise>
-			         	 尊敬的用户您好，你还没有下单哦！
-			       </c:otherwise>
-		</c:choose>
-		
-	</div>
-	-->
-</body>
 </html>
-
-
- 

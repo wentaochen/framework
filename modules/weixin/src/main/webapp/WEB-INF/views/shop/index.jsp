@@ -51,7 +51,7 @@
           <p>送货速度：</p>
           <p class="shsd">快如闪电(10)速度还行(2)慢如蜗牛(0)</p>
         </div>
-        <a href="pro-list.html" class="more_but">逛 逛</a>
+        <a href="${ctx}/cart/list" class="more_but">逛 逛</a>
      </div>
      
      <!--公告信息-->
@@ -73,7 +73,7 @@
       
       <div class="baiBox">
          <div class="bkuai_tit">
-            <a href="review_list.html">
+            <a href="${ctx}/comments">
               <p class="f_left">用户评价 <span class="hui_999">(12)</span></p>
               <p class="f_right"><i class="icon-angle-right"></i></p>
             </a>  
@@ -86,15 +86,17 @@
                <strong class="st-fs-3"></strong>
             </p>
             <p class="zhenghang">
-              外送速度很快，32个赞
+             	 外送速度很快，32个赞
             </p> 
           </div>
        </div>
        
        <div class="baiBox">
          <div class="bkuai_tit">
-            <p class="f_left">外卖历史订单 <span class="hui_999">(30)</span></p>
-            <p class="f_right"><i class="icon-angle-right"></i></p>
+         	<a href="${ctx}/comments">
+            	<p class="f_left">外卖历史订单 <span class="hui_999">(30)</span></p>
+            	<p class="f_right"><i class="icon-angle-right"></i></p>
+            </a>
          </div>
          
          <div class="dindan_t">
