@@ -569,6 +569,12 @@
 		</dependency>
 		
 		<!-- 测试 -->
+		<!-- https://github.com/spring-projects/spring-test-mvc -->
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-test-mvc</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.unitils</groupId>
 			<artifactId>unitils-spring</artifactId>

@@ -31,6 +31,10 @@
     <li><a href="user.html"><i class="icon-user"></i></a></li>
     <li><i class="icon-reorder"></i></li>
   </ul>
+  <ul class="menu_zd">
+    <li><a href="#">展开菜单1</a></li>
+    <li><a href="#">展开菜单2</a></li>
+  </ul>
  </header>
  
 <div class="stieBox" id="wrapper">
@@ -108,6 +112,21 @@
 </div>
 </body>
 <script type="text/javascript">
+//折叠菜单
+$(".icon-reorder").click(function(){
+
+	    if ( $(".menu_zd").css("display")=="block" ){ 
+		   $(".menu_zd").css({ "display": "none"});
+		   
+		}else{ 
+		   $(".menu_zd").css({ "display": "block"});
+		};
+});
+$(document).ready(function(){
+ $(".menu_zd li").eq(0).addClass("no-border");
+
+});
+
 //滚动区的JS
 var myScroll;
 function loaded() {

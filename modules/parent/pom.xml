@@ -46,6 +46,16 @@
 		</repository>
 		-->
 		<repository>
+			<id>Spring io</id>
+			<name>SpringIO Repository</name>
+			<url>http://repo.spring.io/libs-milestone/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		
+		
+		<repository>
 			<id>new offical</id>
 			<name>New Maven Official Repository</name>
 			<url>http://search.maven.org</url>
@@ -782,6 +792,13 @@
 
 			<!-- test begin -->
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test-mvc</artifactId>
+				<version>1.0.0.M2</version>
+				<scope>test</scope>
+			</dependency>
+			
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.8.1</version>
@@ -846,6 +863,14 @@
 				<groupId>org.dbunit</groupId>
 				<artifactId>dbunit</artifactId>
 				<version>2.4.8</version>
+				<scope>test</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- test end -->
