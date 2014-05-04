@@ -18,6 +18,12 @@ import com.weixin.domain.service.shop.MemberService;
 import com.weixin.infra.Config;
 import com.weixin.infra.Exceptions;
 
+/**
+ * 完成从微信跳转到注册页面，特别是binding方法，后面openid就是跟的微信id
+ * 
+ * @author chenwentao
+ * 
+ */
 @Controller
 @RequestMapping
 public class BindingController {
@@ -34,7 +40,7 @@ public class BindingController {
 	private MemberService memberService;
 
 	/**
-	 * 调整到注册页面
+	 * 跳转到注册页面
 	 * 
 	 * @param openid
 	 * @param model
@@ -55,7 +61,7 @@ public class BindingController {
 	}
 
 	/**
-	 * 创建绑定页面
+	 * 创建会员信息
 	 * 
 	 * @param session
 	 * @param member

@@ -14,6 +14,12 @@ import com.weixin.domain.model.shop.Member;
 import com.weixin.domain.service.shop.MemberService;
 import com.weixin.infra.Config;
 
+/**
+ * 商铺首页面
+ * 
+ * @author chenwentao
+ * 
+ */
 @Controller
 @RequestMapping
 public class IndexController {
@@ -21,11 +27,11 @@ public class IndexController {
 	@Inject
 	private MemberService memberService;
 
-	@RequestMapping(value = { "", "/" ,"index"})
+	@RequestMapping(value = { "", "/", "index" })
 	public String index(
 			@RequestParam(value = "openid", required = false) String openid,
 			HttpSession session, Model model) throws IOException {
-		
+
 		// 解决微信跳转出现两个不同的session,是由于配置微信采用代理的方式
 		if (openid != null) {
 			Member member = memberService.findByOpenid(openid);

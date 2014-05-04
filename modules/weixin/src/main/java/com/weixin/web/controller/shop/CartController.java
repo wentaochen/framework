@@ -19,6 +19,12 @@ import com.weixin.domain.service.shop.ProductService;
 import com.weixin.domain.service.shop.ProductTypeService;
 import com.weixin.infra.Config;
 
+/**
+ * 购物车控制类，目前只使用了carList方法
+ * 
+ * @author chenwentao
+ * 
+ */
 @Controller
 @RequestMapping("/cart/")
 public class CartController {

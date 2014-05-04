@@ -18,6 +18,12 @@ import com.weixin.domain.model.shop.Member;
 import com.weixin.domain.service.shop.MemberService;
 import com.weixin.infra.Config;
 
+/**
+ * 会员登录控制类
+ * 
+ * @author chenwentao
+ * 
+ */
 @Controller
 @RequestMapping
 public class LoginController {
@@ -42,17 +48,17 @@ public class LoginController {
 			throws IOException {
 		Member currentMember = memberService.login(member);
 		if (currentMember == null) {
-			//return Config.REDIRECT_INDEX + "login";
+			// return Config.REDIRECT_INDEX + "login";
 			return "fail";
 		}
 		session.setAttribute(Config.SESSION_USER, currentMember);
 
-		//return Config.REDIRECT_INDEX;
+		// return Config.REDIRECT_INDEX;
 		return "ok";
 	}
 
 	/**
-	 * 登陆操作
+	 * 登出操作
 	 */
 	@RequestMapping(value = "loginout")
 	public String login(HttpServletRequest request,

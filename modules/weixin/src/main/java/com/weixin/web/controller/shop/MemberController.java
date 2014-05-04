@@ -15,6 +15,12 @@ import com.weixin.domain.model.shop.Member;
 import com.weixin.domain.service.shop.MemberService;
 import com.weixin.infra.Config;
 
+/**
+ * 会员中心管理
+ * 
+ * @author chenwentao
+ * 
+ */
 @Controller
 @RequestMapping("/member/")
 public class MemberController {
