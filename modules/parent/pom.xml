@@ -791,13 +791,14 @@
 			<!-- utils end -->
 
 			<!-- test begin -->
+			<!--  
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test-mvc</artifactId>
 				<version>1.0.0.M2</version>
 				<scope>test</scope>
 			</dependency>
-			
+			-->
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>

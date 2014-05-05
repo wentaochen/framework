@@ -24,19 +24,8 @@
 </head>
 
 <body>
- <header>
-  <h1 class="toptitle">店铺详情</h1>
-  <ul class="top_ico">
-    <li><a href="index.html"><i class="icon-home"></i></a></li>
-    <li><a href="user.html"><i class="icon-user"></i></a></li>
-    <li><i class="icon-reorder"></i></li>
-  </ul>
-  <ul class="menu_zd">
-    <li><a href="#">展开菜单1</a></li>
-    <li><a href="#">展开菜单2</a></li>
-  </ul>
- </header>
- 
+<c:set var="toptitle" value="店铺详情"></c:set>
+<%@ include file="common/header.jsp"%>
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
      <!--顶图-->
@@ -112,21 +101,6 @@
 </div>
 </body>
 <script type="text/javascript">
-//折叠菜单
-$(".icon-reorder").click(function(){
-
-	    if ( $(".menu_zd").css("display")=="block" ){ 
-		   $(".menu_zd").css({ "display": "none"});
-		   
-		}else{ 
-		   $(".menu_zd").css({ "display": "block"});
-		};
-});
-$(document).ready(function(){
- $(".menu_zd li").eq(0).addClass("no-border");
-
-});
-
 //滚动区的JS
 var myScroll;
 function loaded() {

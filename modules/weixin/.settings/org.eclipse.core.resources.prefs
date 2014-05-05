@@ -109,6 +109,7 @@ encoding//src/main/java/com/weixin/web/controller/admin/ProductTypeAdminControll
 encoding//src/main/java/com/weixin/web/controller/shop/BindingController.java=UTF-8
 encoding//src/main/java/com/weixin/web/controller/shop/CartController.java=UTF-8
 encoding//src/main/java/com/weixin/web/controller/shop/CommentController.java=UTF-8
+encoding//src/main/java/com/weixin/web/controller/shop/ContactController.java=UTF-8
 encoding//src/main/java/com/weixin/web/controller/shop/IndexController.java=UTF-8
 encoding//src/main/java/com/weixin/web/controller/shop/LoginController.java=UTF-8
 encoding//src/main/java/com/weixin/web/controller/shop/MemberController.java=UTF-8

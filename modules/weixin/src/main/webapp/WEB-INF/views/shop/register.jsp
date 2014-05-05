@@ -23,15 +23,8 @@
 </head>
 
 <body>
- <header>
-  <h1 class="toptitle">注册</h1>
-  <ul class="top_ico">
-    <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
-    <li><a href="${ctx}/"><i class="icon-user"></i></a></li>
-    <li><i class="icon-reorder"></i></li>
-  </ul>
- </header>
- 
+<%@ include file="common/header.jsp"%>
+
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
      <!--顶图-->

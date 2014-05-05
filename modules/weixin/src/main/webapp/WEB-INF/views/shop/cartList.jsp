@@ -30,15 +30,13 @@
 
 <script type="text/javascript">
 var map = new HashMap();  
-
   
-  
-map.put(1,"小张");  
-map.put(2,"小名");  
-alert(map.get(1));  
-alert(map.get(2));  
-map.remove("xxxxx");  
-alert(map.size());  
+//map.put(1,"小张");  
+//map.put(2,"小名");  
+//alert(map.get(1));  
+//alert(map.get(2));  
+//map.remove("xxxxx");  
+//alert(map.size());  
 
 
 $(document).ready(function(){
@@ -61,14 +59,8 @@ $(document).ready(function(){
 </head>
 
 <body>
- <header>
-  <h1 class="toptitle"><a href="${ctx}/"><i class="icon-angle-left"></i>Jet的水果铺</a></h1>
-  <ul class="top_ico">
-    <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
-    <li><a href="${ctx}/member"><i class="icon-user"></i></a></li>
-    <li><i class="icon-reorder"></i></li>
-  </ul>
- </header>
+<c:set var="toptitle" value="Jet水果铺"></c:set>
+<%@ include file="common/header.jsp"%>
  
 <div id="search_bar" data-reveal-id="myModal">
     <div class="searchBox">
@@ -123,9 +115,9 @@ $(document).ready(function(){
 						              </a>
 						              <div class="tjia">
 						                <input type="hidden" class="max" value="30" />
-						                <div class="minus hide" onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
+						                <div class="minus hide" onclick="changeNum(${item.id},this,'-')"><i class="icon-minus"></i></div>
 						                <div class="shuzi hide">0</div>
-						                <div class="plus" onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+						                <div class="plus" onclick="changeNum(${item.id},this,'+')"><i class="icon-plus"></i></div>
 						              </div>
 						           </li>  
 				   	     </c:forEach>
@@ -280,8 +272,10 @@ $(".bott_zhankai").click(function(){
   		}
   		handle&&handle.call(this,num);
   	}
-  	function changeNum(self,type){
-       var self = $(self);
+  	function changeNum(id,self,type){
+  	   changeData(id,self);
+       
+  	   var self = $(self);
        var _parent = self.parents(".tjia,.tjia2");
        var shuziElem = _parent.find(".shuzi,.shuzi2");
        var max = _parent.find(".max,.max2").val();
@@ -300,6 +294,10 @@ $(".bott_zhankai").click(function(){
 		$('.tjia',_targetElem).find('.minus,.shuzi').addClass('hide');
 		}
       });
+  	}
+  	
+  	function changeData(id,self){
+  		
   	}
   </script>
 </html>
