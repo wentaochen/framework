@@ -59,6 +59,7 @@ public class JPASchemaExport {
 	public static void main(String[] args) throws Exception {
 		try {
 			ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+			System.out.print("sgsagsd");
 			
 			File file=new File("");
 			AnnotationConfiguration config = new AnnotationConfiguration()

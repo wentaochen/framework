@@ -62,7 +62,7 @@ $().ready(function() {
 	var validator = $("#loginForm").validate({
 		submitHandler : function(form) {
 			$.ajax({
-                cache: true,
+                cache: false,
                 type: "POST",
                 url:"${ctx}/login",
                 data:$('#loginForm').serialize(),

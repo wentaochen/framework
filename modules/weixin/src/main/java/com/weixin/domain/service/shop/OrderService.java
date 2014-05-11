@@ -38,4 +38,8 @@ public class OrderService extends AbstractService<Order> {
 		
 		this.merge(order);
 	}
+
+	public List<Order> findHistory(Member member) { 
+		return this.find("from Order o where o.member=? order by o.createTime desc", member);
+	}
 }

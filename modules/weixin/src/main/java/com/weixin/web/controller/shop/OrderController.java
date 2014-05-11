@@ -30,6 +30,9 @@ public class OrderController {
 	@RequestMapping(value = "history", method = RequestMethod.GET)
 	public String historyList(HttpSession session, Model model)
 			throws IOException {
+		Member member = (Member) session.getAttribute(Config.SESSION_USER);
+		List<Order> orderList =  orderService.findHistory(member);
+		model.addAttribute("orderList", orderList);
 		return Config.VIEWS_SHOP + "orderHistoryList";
 	}
 

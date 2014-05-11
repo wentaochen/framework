@@ -65,7 +65,7 @@
             <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-food"></i></span>我的菜单
           </li>
           <li>
-           <a href="my_order.html"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-bell-alt"></i></span>我的外卖</a>
+           <a href="${ctx}/order/history"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-bell-alt"></i></span>我的外卖</a>
           </li>
           <li>
             <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-pushpin"></i></span>我的预订
