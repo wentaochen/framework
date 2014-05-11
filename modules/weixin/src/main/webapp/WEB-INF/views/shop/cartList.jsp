@@ -29,8 +29,17 @@
 
 
 <script type="text/javascript">
+function Item(id,price,number) {
+	 this.id=id;
+	 this.price=price;
+	 this.number=number;
+}
+
 var map = new HashMap();  
-  
+var totalPrice=0;
+var totalCount=0;  
+
+//alert(map.get(3));
 //map.put(1,"小张");  
 //map.put(2,"小名");  
 //alert(map.get(1));  
@@ -100,24 +109,33 @@ $(document).ready(function(){
  </div>
  <!--右侧列表代码开始-->
  <div class="right_list" id="wrapper">
+ 	 <!-- 
+ 	 <c:set value="1" var="count"/> 
+ 	 <c:set value="${count+1}" var="count"/>
+ 	   --> 
      <c:forEach items="${types}"  var="item" varStatus="s">
    	   			 <div class="section" id="section-${item.id}">
 				 <h2 class="fltitle">${item.name}</h2>
 		         <ul id="thelist">
 		         
 		         		 <c:forEach items="${item.products}"  var="product" begin="1" varStatus="varStatus">
-				   	   			   <li class="goodsitem" data-goodsid="${varStatus.count}">
+				   	   			   <li class="goodsitem" data-goodsid="${product.id}">
+				   	   			  
 						             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="${product.name}">
 						              <div class="photo"><img src="${ctx}/static/shop/img/list_img.jpg"></div>
 						              <h3>${product.name}</h3>
 						              <p>已售20份<span>3人赞过</span></p>
-						              <p class="jiaqian">￥10<span>14</span></p>
+						              <p class="jiaqian">￥${product.price}<span>${product.price*2}</span></p>
 						              </a>
 						              <div class="tjia">
+						              <!--  
+						              	<input type="hidden" class="id" value="1" >
+						              	<input type="hidden" class="jiage" value="100" >
+						              -->
 						                <input type="hidden" class="max" value="30" />
-						                <div class="minus hide" onclick="changeNum(${item.id},this,'-')"><i class="icon-minus"></i></div>
+						                <div class="minus hide" onclick="changeNum(${product.id},${product.price},this,'-')"><i class="icon-minus"></i></div>
 						                <div class="shuzi hide">0</div>
-						                <div class="plus" onclick="changeNum(${item.id},this,'+')"><i class="icon-plus"></i></div>
+						                <div class="plus" onclick="changeNum(${product.id},${product.price},this,'+')"><i class="icon-plus"></i></div>
 						              </div>
 						           </li>  
 				   	     </c:forEach>
@@ -127,11 +145,13 @@ $(document).ready(function(){
    	</c:forEach>
   </div>
  
+ <!--统计报价-->
 <div id="foot_box" style="display:none;">
-  <ul class="bott_list">
-  </ul>
+ <ul style="display: block;" class="bott_list">
   
-  <div class="heji_box">总计：￥132.0/5个菜</div>
+   </ul>
+  
+  <div id="totalContent" class="heji_box"></div>
 
   <div class="foot_bott">
     <a href="affirm.html" class="bott_ok_but">选好了</a>
@@ -140,18 +160,17 @@ $(document).ready(function(){
 </div>
 <!-- 底部菜单模版文件-->
 <ul id="footer-list-template" style="display:none;">
- <li class="xzli goodsitem">
-      <span></span>
+ <li data-goodsid="_id_" class="xzli goodsitem">
+      <span>_title_</span>
        <div class="tjia2">
-           <p class="jiage">￥10</p>
-           <input type="hidden" class="max2" value="30" />
-           <div class="minus2"  onclick="changeNum(this,'-')"><i class="icon-minus"></i></div>
-           <div class="shuzi2">1</div>
-           <div class="plus2"  onclick="changeNum(this,'+')"><i class="icon-plus"></i></div>
+           <p class="jiage">￥_price_</p>
+           <input class="max2" value="30" type="hidden">
+           <div class="minus2" onclick="changeNum(_id_,_price_,this,'-')"><i class="icon-minus"></i></div>
+           <div class="shuzi2"></div>
+           <div class="plus2" onclick="changeNum(_id_,_price_,this,'+')"><i class="icon-plus"></i></div>
       </div>
     </li>
 </ul>
-</body>
 
 <script type="text/javascript">
 //页脚展开关闭代码
@@ -197,21 +216,22 @@ $(".bott_zhankai").click(function(){
 /**
 加减运算
 **/  
-	function addOrderList(tjia){
+	function addOrderList(id,price,tjia){
 		var _parent=$(tjia).parents('.goodsitem');
-		var _goodsid = _parent.attr('data-goodsid');
+		var _goodsid = id;
 		var _targetGoods=$('.bott_list li[data-goodsid='+_goodsid+']');
 		if(_targetGoods.length>0){
 			return;
 		}else{
 			//商品标题
 			var title = _parent.find('h3').html();
-			$template = $('#footer-list-template li').clone().attr('data-goodsid',_goodsid);
+			$template = $('#footer-list-template').clone().html();
 			//添加商品标题
-			$template.children('span').html(title)
-			$template.appendTo($('.bott_list'));
+			var $con = $template.replace(/_title_/g,title).replace(/_id_/g,id).replace(/_price_/g,price);
+			$('.bott_list').append($con);
 		}
 	}
+	
 	function removeOrderList(tjia){
 		var _goodsid = $(tjia).parents('.goodsitem').attr('data-goodsid');
 		var _targetGoods=$('.bott_list li[data-goodsid='+_goodsid+']');
@@ -219,13 +239,13 @@ $(".bott_zhankai").click(function(){
 			_targetGoods.remove();
 		}
 	}
-  	function filterNum(_parent,num,min,max,handle){
+  	function filterNum(id,price,_parent,num,min,max,handle){
   		if(isNaN(num)){
   			num=0;
   		}
   		$(".minus,.shuzi,.plus",_parent).removeClass("hide");
 		if(_parent.is('.tjia')){
-			addOrderList(_parent);
+			addOrderList(id,price,_parent);
 		}
 		
 		
@@ -272,21 +292,22 @@ $(".bott_zhankai").click(function(){
   		}
   		handle&&handle.call(this,num);
   	}
-  	function changeNum(id,self,type){
-  	   changeData(id,self);
-       
+  	function changeNum(id,price,self,type){
   	   var self = $(self);
        var _parent = self.parents(".tjia,.tjia2");
        var shuziElem = _parent.find(".shuzi,.shuzi2");
        var max = _parent.find(".max,.max2").val();
        var _shuzi = parseInt(shuziElem.html());
+
       if(type=="+"){
         _shuzi++;
       }else{
          _shuzi--;
       }
+      //计算总架构和总菜数
+      changeData(id,_shuzi,price);
      
-      filterNum(_parent,_shuzi,0,max,function(num){
+      filterNum(id,price,_parent,_shuzi,0,max,function(num){
         var _goodsid = _parent.parents('.goodsitem').attr('data-goodsid');
 		var _targetElem = $('li[data-goodsid='+_goodsid+']');
 		_targetElem.find(".shuzi,.shuzi2").html(num);
@@ -296,8 +317,62 @@ $(".bott_zhankai").click(function(){
       });
   	}
   	
-  	function changeData(id,self){
-  		
+  	
+  	//业务逻辑计算处理
+  	function changeData(id,number,price){
+  		  var item=map.get(id);
+  		  //如果为空
+  		  if(item==null){
+  			  item=new Item(id,price,number);
+  			  map.put(id,item);
+  		  }else{
+  		  	  //如果不为空
+  		 	  item.number=number;
+  		  }
+  		  
+  		   updateTotal(map);
   	}
+  	
+  	function updateTotal(map){
+  		var valueArray=map.values();
+  		var tPrice=0;
+  		var tNumber=0;
+  		for(var i=0;i<=valueArray.length-1;i++){
+  			var item=valueArray[i];
+  			tPrice=tPrice+item.price*item.number;
+  			tNumber=tNumber+item.number;
+  		}
+  		
+  		$("#totalContent").html("总计：￥"+tPrice+"/"+tNumber+"个菜");
+  	}
+  	
+  	
+  	function confirmOrder(){
+  		var valueArray=map.values();
+  		var idAndNumbers="";
+  		for(var i=0;i<=valueArray.length-1;i++){
+  			var item=valueArray[i];
+  			idAndNumbers=idAndNumbers+item.id+"+"+item.number+";";
+  		}
+  		
+		$.ajax({
+            cache: true,
+            type: "POST",
+            url:"${ctx}/login",
+            data:$('#loginForm').serialize(),
+            async: true,
+            error: function(request) {
+                alert("提交失败请刷新后在提交");
+            },
+            success: function(data) {
+                 if("ok"==data){
+                	 window.location.href = "${ctx}/";
+                 }else{
+                	 alert("输入信息有误，请填写正确的手机号码或密码");
+                 }
+            }
+        });
+  	}
+  	
   </script>
 </html>

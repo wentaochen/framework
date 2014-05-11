@@ -35,7 +35,7 @@
         <i class="icon-key"></i> <input type="password" name="password"  class="logform" placeholder="密码">
        </div>
        <div class="but-box">
-        <input type="button" value="登 录" class="login-but">
+        <input type="submit" value="登 录" class="login-but">
         <c:if test="${sessionScope.openid!=null}"> 
 				<a href="${ctx}/binding/${sessionScope.openid}">注册</a>
 		</c:if>
