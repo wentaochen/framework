@@ -531,7 +531,7 @@
 				<version>${spring-security.version}</version>
 			</dependency>
 
-			<dependency>
+			<dephendency>
 				<groupId>com.octo.captcha</groupId>
 				<artifactId>jcaptcha</artifactId>
 				<version>1.0</version>

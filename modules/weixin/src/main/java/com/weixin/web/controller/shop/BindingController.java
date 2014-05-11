@@ -69,7 +69,8 @@ public class BindingController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/binding", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+	//produces = "text/html;charset=UTF-8",
+	@RequestMapping(value = "/binding",method = RequestMethod.POST)
 	@ResponseBody
 	public String createMember(HttpSession session, Member member, Model model)
 			throws IOException {
