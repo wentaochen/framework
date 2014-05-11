@@ -1,7 +1,5 @@
 <%@ page pageEncoding="UTF-8"%>
-<header>
-  
-  <h1 class="toptitle">${toptitle}</h1>
+
   <ul class="top_ico">
     <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
     <li><a href="${ctx}/member/"><i class="icon-user"></i></a></li>
@@ -11,7 +9,7 @@
     <li><a href="#">展开菜单1</a></li>
     <li><a href="#">展开菜单2</a></li>
   </ul>
-</header>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	  $(".menu_zd li").eq(0).addClass("no-border");

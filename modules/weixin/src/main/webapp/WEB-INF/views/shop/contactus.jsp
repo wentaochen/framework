@@ -22,16 +22,8 @@
 
 <body>
 <header>
-  <h1 class="toptitle"><a href="user.html"><i class="icon-angle-left"></i>联系我们</a></h1>
-  <ul class="top_ico">
-    <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
-    <li><a href="${ctx}/member"><i class="icon-user"></i></a></li>
-    <li><i class="icon-reorder"></i></li>
-  </ul>
-  <ul class="menu_zd">
-    <li><a href="#">展开菜单1</a></li>
-    <li><a href="#">展开菜单2</a></li>
-  </ul>
+  <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"><i class="icon-angle-left"></i>联系我们</a></h1>
+ <%@ include file="common/header.jsp"%>
 </header>
 <script type="text/javascript">
 $(document).ready(function(){
