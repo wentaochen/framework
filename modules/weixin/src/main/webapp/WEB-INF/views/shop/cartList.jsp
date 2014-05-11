@@ -68,8 +68,10 @@ $(document).ready(function(){
 </head>
 
 <body>
-<c:set var="toptitle" value="Jet水果铺"></c:set>
+<header>
+ <h1 class="toptitle">水果铺</h1>
 <%@ include file="common/header.jsp"%>
+</header>
  
 <div id="search_bar" data-reveal-id="myModal">
     <div class="searchBox">

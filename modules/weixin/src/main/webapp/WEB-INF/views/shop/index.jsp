@@ -24,8 +24,10 @@
 </head>
 
 <body>
-<c:set var="toptitle" value="店铺详情"></c:set>
+<header>
+ <h1 class="toptitle">店铺详情</h1>
 <%@ include file="common/header.jsp"%>
+</header>
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
      <!--顶图-->
