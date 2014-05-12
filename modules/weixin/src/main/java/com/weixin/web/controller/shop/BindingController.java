@@ -48,7 +48,8 @@ public class BindingController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/binding/{openid}", produces = "text/html;charset=UTF-8")
-	public String bindingForm(@PathVariable("openid") String openid, Model model)
+	public String bindingForm(@PathVariable("openid") String openid,
+			HttpSession session,Model model)
 			throws IOException {
 		// 如果已经注册采用重定向的方式登陆到首页
 		if (memberService.findByOpenid(openid) != null) {
@@ -56,6 +57,7 @@ public class BindingController {
 		}
 
 		model.addAttribute("openid", openid);
+		session.setAttribute("openid", openid);
 
 		return Config.VIEWS_SHOP + "register";
 	}

@@ -10,12 +10,11 @@
 <meta name="copyright" content="版权声明" />
 <title>外卖</title>
 <!--[if lt IE 9]>
-    <script src="${ctx}/static/shop/js/css3-mediaqueries.js"></script>
+    <script src="{ctx}/static/shop/js/css3-mediaqueries.js"></script>
     <script src="${ctx}/static/shop/js/html5.js"></script>
 <![endif]-->
-
 <link href="${ctx}/static/shop/css/main.css" rel="stylesheet" type="text/css">
-<link href="${ctx}/static/shop/css/font-awesome.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="${ctx}/static/shop/css/font-awesome.min.css">
 <!--[if IE 7]>
   <link rel="stylesheet" href="${ctx}/static/shop/css/font-awesome-ie7.min.css">
 <![endif]-->
@@ -24,7 +23,10 @@
 </head>
 
 <body>
-<%@ include file="common/header.jsp" %>
+<header>
+    <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"> <i class="icon-angle-left"></i>用户留言</h1>
+    <%@ include file="common/header.jsp"%>
+</header>
  
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">

@@ -23,14 +23,19 @@
 </head>
 
 <body>
-<%@ include file="common/header.jsp"%>
+<header>
+
+    <h1 class="toptitle">注册</h1>
+    <%@ include file="common/header.jsp"%>
+</header>
 
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
      <!--顶图-->
     <div class="top_login">
        <form id="registerForm"action="${ctx}/binding" method="post">
-       		<input type="hidden" name="openid" value="${openid}">
+               
+       		  <input type="hidden" name="openid" value="${openid}">
 		       <div class="log-box">
 		        <i class="icon-user"></i> <input name="name" type="text" class="logform" placeholder="姓名">
 		       </div> 
@@ -38,10 +43,13 @@
 		        <i class="icon-key"></i> <input name="mobile" type="text" class="logform" placeholder="手机号码">
 		       </div>
 		       <div class="log-box">
+		        <i class="icon-key"></i> <input name="address" type="text" class="logform" placeholder="送货地址">
+		       </div>
+		       <div class="log-box">
 		        <i class="icon-key"></i> <input name="password" type="password" class="logform" placeholder="确认密码">
 		       </div>
 		       <div class="but-box">
-		        <input type="submit" value="确 定" class="login-but">
+		        <input type="submit" value="注 册" class="login-but">
 		        <a href="${ctx}/login">登 录</a>
 		       </div>
       </form> 
@@ -89,8 +97,8 @@
 						maxlength : 11
 					   },
 					   password: {
-					    required: true,
-					    minlength: 6
+					    required: true
+					    //,minlength: 3
 					  } 
 			    }
 				,messages: {
@@ -106,8 +114,8 @@
 						maxlength : "手机号最多11位"
 					},
 					password: {
-						required: "请输入密码",
-						minlength: "密码长度最少6位"
+						required: "请输入密码"
+						//,minlength: "密码长度最少3位"
 					} 
 				}
 			});

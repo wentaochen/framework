@@ -21,8 +21,11 @@
 </head>
 
 <body>
-<c:set var="toptitle" value="登录"></c:set>
+<header>
+<h1 class="toptitle">登录</h1>
 <%@ include file="common/header.jsp"%>
+</header>
+
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
      <!--顶图-->
@@ -87,7 +90,7 @@ $().ready(function() {
 			   },
 			   password: {
 			    required: true,
-			    minlength: 6
+			    minlength: 3
 			  } 
 	    }
 		,messages: {
@@ -98,7 +101,7 @@ $().ready(function() {
 			},
 			password: {
 				required: "请输入密码",
-				minlength: "密码长度最少6位"
+				minlength: "密码长度最少3位"
 			} 
 		}
 	});

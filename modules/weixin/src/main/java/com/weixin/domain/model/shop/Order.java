@@ -26,6 +26,8 @@ public class Order extends IdEntity {
 
 	private Double totalPrice;
 
+	private Integer totalNumber;
+
 	private OrderState orderState;
 
 	public Member getMember() {
@@ -58,5 +60,20 @@ public class Order extends IdEntity {
 
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	/**
+	 * @return the totalNumber
+	 */
+	public Integer getTotalNumber() {
+		return totalNumber;
+	}
+
+	/**
+	 * @param totalNumber
+	 *            the totalNumber to set
+	 */
+	public void setTotalNumber(Integer totalNumber) {
+		this.totalNumber = totalNumber;
 	}
 }

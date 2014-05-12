@@ -6,7 +6,7 @@ public class ResponseUtils {
 
 	//public static final String url = "http://www.wrisc.cn/wx/redirect?forward=%s&openid=%s";
 	
-	public static final String REDIRECT_URL = "http://cwt.sharev.org/wx/redirect?forward=%s&openid=%s";
+	public static final String REDIRECT_URL = "http://cwt.sharev.org/weixin/redirect?forward=%s&openid=%s";
 
 	/**
 	 * 进入注册页面

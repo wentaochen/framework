@@ -49,8 +49,8 @@ overflow:auto;}
 .dp_name{float:left; width:68%; height:30px;line-height:30px;  font-size:1.25em; color:#262626; overflow:hidden;}
 .xinxi{ float:left; width:68%;line-height:24px; font-size:1em; }
 .xinxi p{float:left; }
-.fshu{ float:left; width:75px; height:12px; background:url(../images/start.png) repeat-x 0px 0px; margin-top:6px;}
-.fshu strong{float:left; display:block; height:12px; background:url(../images/start.png) repeat-x 0px -12px;}
+.fshu{ float:left; width:75px; height:12px; background:url(../img/start.png) repeat-x 0px 0px; margin-top:6px;}
+.fshu strong{float:left; display:block; height:12px; background:url(../img/start.png) repeat-x 0px -12px;}
 .fshu .st-fs-1{ width:20%;}
 .fshu .st-fs-2{ width:40%;}
 .fshu .st-fs-3{ width:60%;}
@@ -192,7 +192,7 @@ overflow-y:auto; overflow-x:hidden;}
 .butt_right{ float:right;}
 .fkbut{ float:left; width:66px;  height:34px; text-align:center; border:1px solid #c5c5c5; background:#eeeeee; background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#eeeeee)); background: -moz-linear-gradient(top, #fff, #eeeeee); border-radius:5px; color:#444;  cursor:pointer; position:relative; margin:1px;}
 .xzbk{ border:2px solid #FF4F00; margin:0px;}
-.xzhong{ position:absolute; width:62px; height:30px; border-radius:5px; background:url(../images/xzbut_bg.png) no-repeat 0 0; top:-1px; left:-1px;}
+.xzhong{ position:absolute; width:62px; height:30px; border-radius:5px; background:url(../img/xzbut_bg.png) no-repeat 0 0; top:-1px; left:-1px;}
 
 .xzdcp{ float:left; width:96%; background:#fff; padding:0px 2%;}
 .jdxxbox{ float:left; width:100%; height:36px; line-height:36px; padding:10px 0; border-bottom:1px solid #ebebeb;}

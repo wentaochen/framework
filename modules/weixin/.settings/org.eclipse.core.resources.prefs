@@ -1,14 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/Account.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/AccountLog.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/CreditLog.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/Shop.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/User.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/UserMember.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/manager/ManagerResource.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/manager/ManagerUser.java=UTF-8
-encoding//src/main/java/com/weixin/domain/model/base/manager/ManangerRole.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Address.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Cart.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/IdEntity.java=UTF-8

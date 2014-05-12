@@ -30,7 +30,8 @@ public class OrderService extends AbstractService<Order> {
 		Order order = new Order();
 		order.setOrderState(OrderState.unconfirmed);
 		order.setMember(member);
-		order.setTotalPrice(cart.getTotalCount());
+		order.setTotalPrice(cart.getTotalPrice());
+		order.setTotalNumber(cart.getTotalNumber());
 		for (Map.Entry<Long, OrderItem> entry : cart.getProducts().entrySet()) {
 			order.getOrderItem().add(entry.getValue());
 			orderItemService.save(entry.getValue());

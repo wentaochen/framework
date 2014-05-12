@@ -16,6 +16,8 @@
 
 <link href="${ctx}/static/shop/css/main.css" rel="stylesheet" type="text/css">
 <link href="${ctx}/static/shop/css/font-awesome.min.css" rel="stylesheet" >
+
+
 <script src="${ctx}/static/shop/js/jquery.min.1.8.3.js" type="text/javascript"></script>
 <script src="${ctx}/static/shop/js/iscroll.js"></script>
 </head>
@@ -25,22 +27,7 @@
   <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"><i class="icon-angle-left"></i>联系我们</a></h1>
  <%@ include file="common/header.jsp"%>
 </header>
-<script type="text/javascript">
-$(document).ready(function(){
-	  $(".menu_zd li").eq(0).addClass("no-border");
-});
-
-//折叠菜单
-$(".icon-reorder").click(function(){
-
-	    if ( $(".menu_zd").css("display")=="block" ){ 
-		   $(".menu_zd").css({ "display": "none"});
-		   
-		}else{ 
-		   $(".menu_zd").css({ "display": "block"});
-		};
-});
-</script>
+ 
 <div class="stieBox" id="wrapper">
   <div id="gundongbox">
       

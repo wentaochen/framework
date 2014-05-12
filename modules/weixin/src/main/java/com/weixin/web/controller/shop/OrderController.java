@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -27,11 +28,22 @@ public class OrderController {
 	/**
 	 * 通过点击首页上的查看历史，进入列表页面
 	 */
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public String orderDetail(@PathVariable("id") Long orderId, Model model)
+			throws IOException {
+		Order order = orderService.get(orderId);
+		model.addAttribute("order", order);
+		return Config.VIEWS_SHOP + "orderDetail";
+	}
+
+	/**
+	 * 通过点击首页上的查看历史，进入列表页面
+	 */
 	@RequestMapping(value = "history", method = RequestMethod.GET)
 	public String historyList(HttpSession session, Model model)
 			throws IOException {
 		Member member = (Member) session.getAttribute(Config.SESSION_USER);
-		List<Order> orderList =  orderService.findHistory(member);
+		List<Order> orderList = orderService.findHistory(member);
 		model.addAttribute("orderList", orderList);
 		return Config.VIEWS_SHOP + "orderHistoryList";
 	}
@@ -43,6 +55,15 @@ public class OrderController {
 	public String clear(HttpSession session, Model model) throws IOException {
 
 		return Config.VIEWS_SHOP + "orderList";
+	}
+
+	/**
+	 * 跳转到订单确认页面
+	 */
+	@RequestMapping(value = "toconfirm")
+	public String toConfirm(HttpSession session, Model model)
+			throws IOException {
+		return Config.VIEWS_SHOP + "orderConfirm";
 	}
 
 	/**
@@ -70,7 +91,8 @@ public class OrderController {
 		// clear cart
 		cart.clear();
 
-		return Config.VIEWS_SHOP + "orderList";
+		return "redirect:/order/history";
+		// return Config.VIEWS_SHOP + "orderList";
 	}
 
 	@RequestMapping(value = "list")

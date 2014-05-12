@@ -21,7 +21,7 @@
 
 <body>
 <header>
- <h1 class="toptitle">我的资料</h1>
+ <h1 class="toptitle">会员中心</h1>
 <%@ include file="common/header.jsp"%>
 </header>
 <!-- 
@@ -50,22 +50,17 @@
           <span class="use_photo"><img src="${ctx}/static/shop/img/user.jpg"></span>
        </div> 
        <div class="yiban-kuan">
-           <span class="user-name">JetXue</span>
+           <span class="user-name">${sessionScope.member.name}</span>
        </div>
     </div>
      <!--基础信息-->
-     
-     
-     <!--公告信息-->
-    
-      
       <div class="user-list">
         <ul>
           <li>
             <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-food"></i></span>我的菜单
           </li>
           <li>
-           <a href="${ctx}/order/history"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-bell-alt"></i></span>我的外卖</a>
+             <a href="${ctx}/order/history"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-bell-alt"></i></span>我的订单</a>
           </li>
           <li>
             <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-pushpin"></i></span>我的预订
@@ -116,8 +111,6 @@ document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 2
 
 </script>
 </html>
-
-
 
 <%-- 
 <!DOCTYPE html>

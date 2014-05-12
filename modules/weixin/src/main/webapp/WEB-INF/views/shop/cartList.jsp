@@ -83,7 +83,7 @@ $(document).ready(function(){
 <!--公告开始-->
  <div id="notice">
     <i class="icon-volume-down float_left"></i> 
-    <span>这里是公告文字</span> 
+    <span>最新优惠打折啦！买10送一！</span> 
     <div id="ico_close"><i class="icon-remove"></i></div>
  </div>
  <!--公告end-->
@@ -156,7 +156,7 @@ $(document).ready(function(){
   <div id="totalContent" class="heji_box"></div>
 
   <div class="foot_bott">
-    <a href="affirm.html" class="bott_ok_but">选好了</a>
+    <a href="javascript:void(0);" onclick="confirmOrder();" class="bott_ok_but">选好了</a>
     <div class="bott_zhankai"><i class="icon-angle-up"></i><i class="icon-angle-down" style="display:none;"></i></div>
   </div>
 </div>
@@ -354,23 +354,21 @@ $(".bott_zhankai").click(function(){
   		var idAndNumbers="";
   		for(var i=0;i<=valueArray.length-1;i++){
   			var item=valueArray[i];
-  			idAndNumbers=idAndNumbers+item.id+"+"+item.number+";";
+  			idAndNumbers=idAndNumbers+item.id+":"+item.number+";";
   		}
   		
 		$.ajax({
             cache: true,
             type: "POST",
-            url:"${ctx}/login",
-            data:$('#loginForm').serialize(),
-            async: true,
+            url:"${ctx}/cart/add",
+            data:"ids="+idAndNumbers,
+            async: false,
             error: function(request) {
                 alert("提交失败请刷新后在提交");
             },
             success: function(data) {
                  if("ok"==data){
-                	 window.location.href = "${ctx}/";
-                 }else{
-                	 alert("输入信息有误，请填写正确的手机号码或密码");
+                	 window.location.href = "${ctx}/order/toconfirm";
                  }
             }
         });
