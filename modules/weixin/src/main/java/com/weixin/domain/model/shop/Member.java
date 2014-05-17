@@ -37,6 +37,7 @@ public class Member extends IdEntity {
 
 	@OneToMany
 	private List<Address> addresses = new ArrayList<Address>();
+	
 
 	public String getOpenid() {
 		return openid;

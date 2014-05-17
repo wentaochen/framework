@@ -20,49 +20,67 @@
   <link rel="stylesheet" href="${ctx}/static/shop/css/font-awesome-ie7.min.css">
 <![endif]-->
 <script src="${ctx}/static/shop/js/jquery.min.1.8.3.js" type="text/javascript"></script>
+<script src="${ctx}/${static}/jquery.validate.min.js" type="text/javascript"></script>
+<script src="${ctx}/${static}/messages_cn.js" type="text/javascript"></script>
 </head>
 
 <body>
-  <h1 class="toptitle"><a href="contact_us.html"><i class="icon-angle-left"></i>意见反馈</a></h1>
-  <ul class="top_ico">
-    <li><a href="${ctx}/"><i class="icon-home"></i></a></li>
-    <li><a href="${ctx}/member"><i class="icon-user"></i></a></li>
-    <li><i class="icon-reorder"></i></li>
-  </ul>
-  <ul class="menu_zd">
-    <li><a href="#">展开菜单1</a></li>
-    <li><a href="#">展开菜单2</a></li>
-  </ul>
+
+<header>
+    <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"><i class="icon-angle-left"></i>意见反馈</a></h1>
+    <%@ include file="common/header.jsp"%>
 </header>
+
+<div class="stieBox" id="wrapper">
+	<form id="commentForm" action="${ctx}/comment/save" method="post">
+ 		<div id="gundongbox">     
+      		<div class="back-box">
+      			<textarea name="comment" cols="500" rows="" class="feedback-text" onkeyup="words_deal();"></textarea>
+      			<div class="xdzf"><span class="zfsz">500</span>字</div>
+      		</div>
+      		<div class="but-box">
+      			<input type="submit" value="发送" class="login-but">
+   			</div> 
+   		</div>
+	</form>    
+</div>
+
 <script type="text/javascript">
-$(document).ready(function(){
-	  $(".menu_zd li").eq(0).addClass("no-border");
-});
-
-//折叠菜单
-$(".icon-reorder").click(function(){
-
-	    if ( $(".menu_zd").css("display")=="block" ){ 
-		   $(".menu_zd").css({ "display": "none"});
-		   
-		}else{ 
-		   $(".menu_zd").css({ "display": "block"});
-		};
+$().ready(function() {
+	
+	var validator = $("#commentForm").validate({
+		submitHandler : function(form) {
+			$.ajax({
+                cache: true,
+                type: "POST",
+                url:"${ctx}/comment/save",
+                data:$('#commentForm').serialize(),
+                async: true,
+                error: function(request) {
+                    alert("提交失败请刷新后在提交");
+                },
+                success: function(data) {
+                     if("ok"==data){
+                    	 window.location.href = "${ctx}/member/";
+                     }else{
+                    	 alert("提交意见错误");
+                     }
+                }
+            });
+		},
+		rules: {
+			   comment: "required",
+	    }
+		,messages: {
+			comment: "请输入意见",
+		}
+	});
 });
 </script>
-<div class="stieBox" id="wrapper">
-  <div id="gundongbox">
-      
-      <div class="back-box">
-      <textarea name="" cols="500" rows="" class="feedback-text" onkeyup="words_deal();"></textarea>
-      <div class="xdzf"><span class="zfsz">500</span>字</div>
-      </div>
-   </div>  
-</div>
 </body>
 
 <script type="text/javascript">
-//
+
 function words_deal()
 {
    var curLength=$(".feedback-text").val().length;

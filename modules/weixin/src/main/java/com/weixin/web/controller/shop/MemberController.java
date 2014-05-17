@@ -34,12 +34,26 @@ public class MemberController {
 		return Config.VIEWS_SHOP + "member";
 	}
 
-	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	public String update(HttpSession session, Member member, Model model)
 			throws IOException {
-		memberService.update(member);
-		session.setAttribute(Config.SESSION_USER, member);
+		Member editMember = memberService.get(member.getId());
+		editMember.setName(member.getName());
+		editMember.setEmail(member.getEmail());
+		editMember.setSex(member.getSex());
+		editMember.setAddress(member.getAddress());
+		memberService.update(editMember);
+		session.setAttribute(Config.SESSION_USER, editMember);
 		return "ok";
+	}
+	
+	@RequestMapping(value = "edit")
+	public String edit(HttpSession session, Model model)
+			throws IOException {
+		Member member = (Member) session.getAttribute(Config.SESSION_USER);
+		System.out.println("id:" + member.getId());
+		model.addAttribute("member", member);
+		return Config.VIEWS_SHOP + "memberEdit";
 	}
 }

@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Address.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Cart.java=UTF-8
+encoding//src/main/java/com/weixin/domain/model/shop/Comment.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/IdEntity.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Member.java=UTF-8
 encoding//src/main/java/com/weixin/domain/model/shop/Order.java=UTF-8

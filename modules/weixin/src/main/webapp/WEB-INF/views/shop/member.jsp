@@ -56,6 +56,9 @@
      <!--基础信息-->
       <div class="user-list">
         <ul>
+       	 <li>
+            <a href="${ctx}/member/edit"><p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-food"></i></span>我的资料</a>
+          </li>
           <li>
             <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-food"></i></span>我的菜单
           </li>
