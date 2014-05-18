@@ -32,7 +32,7 @@
     <form action="${ctx}/login" method="post" id="loginForm"> 
     <div class="top_login">
        <div class="log-box">
-        <i class="icon-user"></i> <input type="text" name="mobile" class="logform" placeholder="用户名">
+        <i class="icon-phone"></i> <input type="text" name="mobile" class="logform" placeholder="手机号">
        </div> 
        <div class="log-box">
         <i class="icon-key"></i> <input type="password" name="password"  class="logform" placeholder="密码">

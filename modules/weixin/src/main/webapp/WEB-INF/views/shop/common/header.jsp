@@ -11,6 +11,14 @@
   <ul class="menu_zd">
     <li><a href="${ctx}/cart/list">购物车</a></li>
     <li><a href="${ctx}/order/history">我的订单</a></li>
+    
+    <%-- 未注册:注册 登录 --%>
+    <c:if test="${empty sessionScope.member}">
+    	<li><a href="${ctx}/binding/${sessionScope.openid}">注册</a></li>
+    	<li> <a href="${ctx}/login">登 录</a></li>
+    </c:if>
+    
+    <%--注册后:退出 --%>
     <c:if test="${not empty sessionScope.member}">
     	<li><a href="${ctx}/loginout">退出</a></li>
     </c:if>

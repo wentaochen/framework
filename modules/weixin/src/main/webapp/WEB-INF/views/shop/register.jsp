@@ -25,8 +25,10 @@
 <body>
 <header>
 
-    <h1 class="toptitle">注册</h1>
-    <%@ include file="common/header.jsp"%>
+    <h1 class="toptitle"> <i class="icon-food"></i>&nbsp;享受生活!</h1>
+    <ul class="top_ico">
+      <li><a href="${ctx}/cart/list"><i class="icon-shopping-cart"></i>&nbsp;</a></li>
+  </ul>
 </header>
 
 <div class="stieBox" id="wrapper">
@@ -34,16 +36,15 @@
      <!--顶图-->
     <div class="top_login">
        <form id="registerForm"action="${ctx}/binding" method="post">
-               
        		  <input type="hidden" name="openid" value="${openid}">
 		       <div class="log-box">
 		        <i class="icon-user"></i> <input name="name" type="text" class="logform" placeholder="姓名">
 		       </div> 
 		       <div class="log-box">
-		        <i class="icon-key"></i> <input name="mobile" type="text" class="logform" placeholder="手机号码">
+		        <i class="icon-phone"></i> <input name="mobile" type="text" class="logform" placeholder="手机号码">
 		       </div>
 		       <div class="log-box">
-		        <i class="icon-key"></i> <input name="address" type="text" class="logform" placeholder="送货地址">
+		        <i class="icon-map-marker"></i> <input name="address" type="text" class="logform" placeholder="送货地址">
 		       </div>
 		       <div class="log-box">
 		        <i class="icon-key"></i> <input name="password" type="password" class="logform" placeholder="确认密码">
@@ -59,7 +60,7 @@
       <div class="user-list">
         <ul>
           <li>
-           <a href="contact_us.html"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-phone"></i></span>联系我们</a>
+           <a href="${ctx}/contactus"> <p class="f_right"><i class="icon-angle-right"></i></p><span><i class="icon-phone"></i></span>联系我们</a>
           </li> 
         </ul>
       </div>    
@@ -140,9 +141,6 @@ document.addEventListener("DOMContentLoaded", function () { setTimeout(loaded, 2
 
 </script>
 </html>
-
-
-
 
 <%-- 
 
