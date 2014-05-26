@@ -20,33 +20,33 @@
   <link rel="stylesheet" href="${ctx}/static/shop/css/font-awesome-ie7.min.css">
 <![endif]-->
 <script src="${ctx}/static/shop/js/jquery.min.1.8.3.js" type="text/javascript"></script>
-<script src="${ctx}/${static}/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${ctx}/${static}/messages_cn.js" type="text/javascript"></script>
+<%-- <script src="${ctx}/${static}/jquery.validate.min.js" type="text/javascript"></script>
+<script src="${ctx}/${static}/messages_cn.js" type="text/javascript"></script> --%>
 </head>
 
 <body>
-
-<header>
-    <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"><i class="icon-angle-left"></i>意见反馈</a></h1>
-    <%@ include file="common/header.jsp"%>
-</header>
+ <header>
+  <h1 class="toptitle"><a href="javascript:void(0);" onclick="history.go(-1)"><i class="icon-angle-left"></i>意见反馈</a></h1>
+  <ul class="top_ico">
+    
+    <li style=" font-size:1.2em;"><a href="javascript:void(0);" onclick="submitComment()">提交</a></li>
+  </ul>
+ 
+ </header>
 
 <div class="stieBox" id="wrapper">
 	<form id="commentForm" action="${ctx}/comment/save" method="post">
  		<div id="gundongbox">     
       		<div class="back-box">
-      			<textarea name="comment" cols="500" rows="" class="feedback-text" onkeyup="words_deal();"></textarea>
+      			<textarea id="comment" name="comment" cols="500" rows="" class="feedback-text" onkeyup="words_deal();"></textarea>
       			<div class="xdzf"><span class="zfsz">500</span>字</div>
       		</div>
-      		<div class="but-box">
-      			<input type="submit" value="发送" class="login-but">
-   			</div> 
    		</div>
 	</form>    
 </div>
 
 <script type="text/javascript">
-$().ready(function() {
+/* $().ready(function() {
 	
 	var validator = $("#commentForm").validate({
 		submitHandler : function(form) {
@@ -75,11 +75,49 @@ $().ready(function() {
 			comment: "请输入意见",
 		}
 	});
-});
+}); */
+
+function submitComment(){
+	if($("#comment").val() == "" || $("#comment").val() == null ){
+		alert("评论不能为空");
+		return;
+	}	
+	$.ajax({
+	    cache: true,
+	    type: "POST",
+	    url:"${ctx}/comment/save",
+	    data:$('#commentForm').serialize(),
+	    async: true,
+	    error: function(request) {
+	        alert("提交失败请刷新后在提交");
+	    },
+	    success: function(data) {
+	         if("ok"==data){
+	        	 window.location.href = "${ctx}/member/";
+	         }else{
+	        	 alert("提交意见错误");
+	         }
+	    }
+	});
+}
 </script>
 </body>
 
 <script type="text/javascript">
+//折叠菜单
+$(".icon-reorder").click(function(){
+
+	    if ( $(".menu_zd").css("display")=="block" ){ 
+		   $(".menu_zd").css({ "display": "none"});
+		   
+		}else{ 
+		   $(".menu_zd").css({ "display": "block"});
+		};
+});
+$(document).ready(function(){
+ $(".menu_zd li").eq(0).addClass("no-border");
+
+});
 
 function words_deal()
 {

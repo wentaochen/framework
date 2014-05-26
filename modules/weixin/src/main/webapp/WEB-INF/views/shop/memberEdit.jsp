@@ -42,7 +42,7 @@
 		        <i class="icon-key"></i> <input name="email" type="text" class="logform" placeholder="电子邮件" value="${member.email}">
 		       </div>
 		       <div class="log-box">
-		        <i class="icon-key"></i> <input name="address" type="text" class="logform" placeholder="送货地址" value="${member.address}">
+		        <i class="icon-map-marker"></i> <input name="address" type="text" class="logform" placeholder="送货地址" value="${member.address}">
 		       </div>
 		       <div class="but-box">
 		        	性别：<span> <input name="sex" value="男" type="radio" class="logform" ${(member.sex=='男')?'checked' : ''}> 男 </span> <span><input name="sex" value="女" type="radio" class="logform" ${(member.sex=='女')?'checked' : ''}>女</span>
