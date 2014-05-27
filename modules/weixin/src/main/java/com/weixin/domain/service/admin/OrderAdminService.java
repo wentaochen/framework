@@ -14,7 +14,7 @@ import com.weixin.domain.service.common.AbstractService;
 public class OrderAdminService extends AbstractService<Order> {
 
 	public List<Order> findAll() {
-		return this.find("from Order");
+		return this.find("from Order order by id desc");
 	}
 
 	public void confirm(Long id) {

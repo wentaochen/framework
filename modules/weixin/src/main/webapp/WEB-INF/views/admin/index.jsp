@@ -51,8 +51,10 @@
 	<DIV class="ui-layout-north">
 		<div id="headeDiv" style="width: 100%;height: 100%;">
 			<div style="display: inline;">
+				<!-- 
 				<img src="http://www.wrisc.cn/wrisc/static/v2/images/logo.png"
 					style="width: 130px" />
+				 -->
 			</div>
 			<div
 				style="display: inline;margin-right: 5%;float: right;font-size:18px;">
@@ -72,6 +74,9 @@
 				</li>
 				<li class="divider"></li>
 				<li class="nav-header">常用功能</li>
+				<li>
+					<a  target="mainFrame" style="font-size: 18px;">&nbsp;&nbsp;&nbsp;店铺管理</a>
+				</li>
 
 				<li><a href="${ctx}/admin/product/list" target="mainFrame"
 					style="font-size: 18px;color: red;">&nbsp;&nbsp;&nbsp;产品管理</a>
@@ -87,12 +92,12 @@
 				</li>
 
 				<li class="divider"></li>
+				<%--
 				<li id="more"><a href="#" class="btn" onclick="show();">更多...</a>
 				</li>
 				<div id="morediv" style="display:none;">
 					<li class="nav-header">高级功能</li>
-					<li><a   target="mainFrame" style="font-size: 18px;">&nbsp;&nbsp;&nbsp;店铺管理</a>
-					</li>
+					
 					<li><a href="#" target="mainFrame" style="font-size: 18px;">&nbsp;&nbsp;&nbsp;支付管理</a>
 					</li>
 					<li><a href="#" target="mainFrame" style="font-size: 18px;">&nbsp;&nbsp;&nbsp;物流管理</a>
@@ -122,6 +127,7 @@
 				<li class="divider"></li>
 				<li><a href="#" target="mainFrame" style="font-size: 20px;">帮助</a>
 				</li>
+				 --%>
 			</ul>
 		</div>
 	</DIV>
@@ -129,7 +135,7 @@
 	<!--footer-->
 	<DIV class="ui-layout-south">
 		<div style="margin-left: 35%">Copyright 2013 - 2014
-			官方网站：www.qtpz.com All Rights 鄂ICP备000001号-1</div>
+			移动电商新力量</div>
 	</DIV>
 </body>
 </html>

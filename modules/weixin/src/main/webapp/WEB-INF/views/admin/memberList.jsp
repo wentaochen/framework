@@ -17,6 +17,8 @@
 					<th>姓名</th>
 					<th>手机</th>
 					<th>邮箱</th>
+					<th>地址</th>
+					<th>注册时间</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -26,6 +28,8 @@
 						<td>${item.name}</td>
 						<td>${item.mobile}</td>
 						<td>${item.email}</td>
+						<td>${item.address}</td>
+						<th>${item.createTime}</th>
 					</tr>
 				</c:forEach>
 			</tbody>

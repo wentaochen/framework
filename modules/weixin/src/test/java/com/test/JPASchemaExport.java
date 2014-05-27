@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -94,9 +95,13 @@ public class JPASchemaExport {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 
-			SchemaExport schemaExport = new SchemaExport(config);
+			SchemaUpdate schemaExport = new SchemaUpdate(config);
 			schemaExport.setOutputFile("c:\\a.txt");
-			schemaExport.create(true, true);
+			schemaExport.execute(true, true);
+
+//			SchemaExport schemaExport = new SchemaExport(config);
+//			schemaExport.setOutputFile("c:\\a.txt");
+//			schemaExport.create(true, true);
 
 			System.out.println("Table created.");
 

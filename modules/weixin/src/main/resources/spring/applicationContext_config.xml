@@ -17,12 +17,12 @@
 	<!-- 生产环境 -->
 	<beans profile="production">
 		<context:property-placeholder
-			ignore-unresolvable="true" location="classpath*:production.properties" />
+			ignore-unresolvable="true" location="classpath*:properties/production.properties" />
 	</beans>
 
 	<!-- 开发环境 -->
 	<beans profile="development">
 		<context:property-placeholder
-			ignore-unresolvable="true" location="classpath*:development.properties" />
+			ignore-unresolvable="true" location="classpath*:properties/development.properties" />
 	</beans>
 </beans>

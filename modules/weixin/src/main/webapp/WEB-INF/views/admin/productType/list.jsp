@@ -10,6 +10,7 @@
 </head>
 <body>
 	<header> 产品分类管理 </header>
+	<a href="${ctx}/admin/productype/add" class="btn btn-info">添加产品分类</a>
 	<div class="bs-docs-example">
 		<table class="table table-hover">
 			<thead>
@@ -38,7 +39,6 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<a href="${ctx}/admin/productype/add" class="btn btn-info">添加</a>
 	</div>
 	<%@include file="/WEB-INF/views/admin/commons/footer.jsp"%>
 </body>

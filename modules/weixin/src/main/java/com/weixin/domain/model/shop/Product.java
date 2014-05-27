@@ -22,8 +22,23 @@ public class Product extends IdEntity {
 
 	private String imageUrl;
 
-	@ManyToOne(optional=true)
-	@JoinColumn(name="type_id")
+	/**
+	 * 打折价格
+	 */
+	private Integer discountPrice;
+
+	/**
+	 * 销售数量
+	 */
+	private Integer salesVolume;
+
+	/**
+	 * 好评数量
+	 */
+	private Integer goodReputation;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "type_id")
 	private ProductType type;
 
 	public String getName() {
@@ -64,5 +79,50 @@ public class Product extends IdEntity {
 
 	public void setType(ProductType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the discountPrice
+	 */
+	public Integer getDiscountPrice() {
+		return discountPrice;
+	}
+
+	/**
+	 * @param discountPrice
+	 *            the discountPrice to set
+	 */
+	public void setDiscountPrice(Integer discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
+	/**
+	 * @return the salesVolume
+	 */
+	public Integer getSalesVolume() {
+		return salesVolume;
+	}
+
+	/**
+	 * @param salesVolume
+	 *            the salesVolume to set
+	 */
+	public void setSalesVolume(Integer salesVolume) {
+		this.salesVolume = salesVolume;
+	}
+
+	/**
+	 * @return the goodReputation
+	 */
+	public Integer getGoodReputation() {
+		return goodReputation;
+	}
+
+	/**
+	 * @param goodReputation
+	 *            the goodReputation to set
+	 */
+	public void setGoodReputation(Integer goodReputation) {
+		this.goodReputation = goodReputation;
 	}
 }

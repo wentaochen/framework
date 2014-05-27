@@ -6,8 +6,16 @@
 <title>添加产品</title>
 </head>
 <body>
-	  <form action="${ctx}/admin/product/add" method="post">
+	  <form action="${ctx}/admin/product/add" method="post" enctype="multipart/form-data">
 	  		<input type="hidden" name="id" value="${model.id}">
+	  		<input type="hidden" id="imageUrl" name="imageUrl" value="${model.imageUrl}">
+	  		<br>
+	  		<label>
+	  			  上传图片:
+	  		</label>
+	  		<br>
+			<input type="file" name="imageFile" id="imageFile">
+	  		<br>
 	  		<label>
 	  			产品名称:
 	  		</label>
@@ -15,10 +23,28 @@
 	  		<input type="text" name="name" value="${model.name}">
 	  		<br>
 	  		<label>
-	  			产品价格:
+	  			产品出售价格价:
 	  		</label>
 	  		<br>
 	  		<input type="text" name="price" value="${model.price}">
+	  		<br>
+	  			<label>
+	  				打折前的价格:
+	  			</label>
+	  		<br>
+	  	 	<input type="text" name="discountPrice" value="${model.discountPrice}">
+	  		<br>
+	  			<label>
+	  				已销售的数量:
+	  			</label>
+	  			<br>
+	  			<input type="text" name="salesVolume" value="${model.salesVolume}">
+	  		<br>
+	  			<label>
+	  				好评数量:
+	  			</label>
+	  			<br>
+	  			<input type="text" name="goodReputation" value="${model.goodReputation}">
 	  		<br>
 	  		 <label>
 	  			产品分类:
@@ -41,7 +67,6 @@
 	  				<option value="个">个</option>
 	  				<option value="套">套</option>
 	  		</select>
-	  		<br>
 	  		<br>
 	  		<input type="submit" value="发布产品">
 	  </form>

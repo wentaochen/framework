@@ -10,6 +10,7 @@
 </head>
 <body>
 	<header> 产品管理 </header>
+	<a href="${ctx}/admin/product/add" class="btn btn-info">添加新的产品</a>
 	<div class="bs-docs-example">
 		<table class="table table-hover">
 			<thead>
@@ -26,7 +27,7 @@
 					<tr>
 						<td>${item.name}</td>
 						<td>$ ${item.price}/${item.unit}</td>
-						<td><img src="${ctx}/${static}/img/dianxin.jpg"
+						<td><img src="${imageUrl}/${item.imageUrl}"
 							class="img-rounded" style="width:100px;height:60px;"></td>
 						<td>
 							 ${item.type.name}
@@ -39,7 +40,6 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<a href="${ctx}/admin/product/add" class="btn btn-info">添加新的产品</a>
 	</div>
 	<%@include file="/WEB-INF/views/admin/commons/footer.jsp"%>
 </body>

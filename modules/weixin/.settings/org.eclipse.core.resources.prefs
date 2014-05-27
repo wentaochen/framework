@@ -112,7 +112,7 @@ encoding//src/main/java/com/weixin/web/controller/weixin/ExceptionControllerTest
 encoding//src/main/java/com/weixin/web/controller/weixin/WeixinController.java=UTF-8
 encoding//src/main/java/com/weixin/web/filter/RightFilter.java=UTF-8
 encoding//src/main/resources=utf-8
-encoding//src/main/resources/development.properties=UTF-8
+encoding//src/main/resources/properties/development.properties=UTF-8
 encoding//src/test/java=UTF-8
 encoding//src/test/java/com/test/JPASchemaExport.java=UTF-8
 encoding//src/test/java/com/weixin/protocol/message/request/RequestBaseMessageTest.java=UTF-8
