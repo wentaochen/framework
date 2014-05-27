@@ -4,9 +4,10 @@ import com.weixin.domain.model.shop.Member;
 
 public class ResponseUtils {
 
-	//public static final String url = "http://www.wrisc.cn/wx/redirect?forward=%s&openid=%s";
-	
-	public static final String REDIRECT_URL = "http://cwt.sharev.org/weixin/redirect?forward=%s&openid=%s";
+	public static final String REDIRECT_URL = "http://www.wrisc.cn/weixin/redirect?forward=%s&openid=%s";
+
+	// public static final String REDIRECT_URL =
+	// "http://www.sharev.org/weixin/redirect?forward=%s&openid=%s";
 
 	/**
 	 * 进入注册页面
@@ -26,71 +27,69 @@ public class ResponseUtils {
 
 	/**
 	 * 显示产品页面
-	 * @param openid 
+	 * 
+	 * @param openid
 	 * 
 	 * @return 主菜单字符信息
 	 */
 	public static String getForShowProduct(Member member, String openid) {
 		String newUrl = String.format(REDIRECT_URL, "/product/list", openid);
 		String respContent;
-		if (member !=null){
-			 respContent = "尊敬的会员" + member.getName() + "欢迎您!";
-		}else {
-			 respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
+		if (member != null) {
+			respContent = "尊敬的会员" + member.getName() + "，欢迎您!";
+		} else {
+			respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
 		}
-		
+
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(respContent).append("\n\n");
-		buffer.append("<a href=\"" + newUrl + "\">查看最新产品！</a>")
-				.append("\n\n");
+		buffer.append("<a href=\"" + newUrl + "\">查看最新产品！</a>").append("\n\n");
 		return buffer.toString();
 	}
-	
-	
-	
+
 	/**
 	 * 显示产品页面
-	 * @param openid 
+	 * 
+	 * @param openid
 	 * 
 	 * @return 主菜单字符信息
 	 */
 	public static String getForOrder(Member member, String openid) {
 		String newUrl = String.format(REDIRECT_URL, "/order/list", openid);
-		
+
 		String respContent;
-		if (member !=null){
-			 respContent = "尊敬的会员" + member.getName() + "欢迎您!";
-		}else {
-			 respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
+		if (member != null) {
+			respContent = "尊敬的会员" + member.getName() + "欢迎您!";
+		} else {
+			respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
 		}
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(respContent).append("\n\n");
-		buffer.append("<a href=\"" + newUrl + "\">查看订单！</a>")
-				.append("\n\n");
+		buffer.append("<a href=\"" + newUrl + "\">查看订单！</a>").append("\n\n");
 		return buffer.toString();
 	}
-	
+
 	/**
 	 * 显示产品页面
-	 * @param openid 
+	 * 
+	 * @param openid
 	 * 
 	 * @return 主菜单字符信息
 	 */
 	public static String getForMember(Member member, String openid) {
 		String newUrl = String.format(REDIRECT_URL, "/member/", openid);
-		
+
 		String respContent;
-		if (member !=null){
-			 respContent = "尊敬的会员" + member.getName() + "欢迎您!";
-		}else {
-			 respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
+		if (member != null) {
+			respContent = "尊敬的会员" + member.getName() + "欢迎您!";
+		} else {
+			respContent = "尊敬的新用户欢迎您!，请到本店铺进行选购哦！";
 		}
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(respContent).append("\n\n");
-		buffer.append("<a href=\"" + newUrl + "\">进入会员中心！</a>")
-				.append("\n\n");
+		buffer.append("<a href=\"" + newUrl + "\">进入会员中心！</a>").append("\n\n");
 		return buffer.toString();
 	}
 

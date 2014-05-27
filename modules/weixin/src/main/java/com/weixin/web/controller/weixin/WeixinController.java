@@ -30,7 +30,7 @@ public class WeixinController {
 	private Route route;
 
 	// 微信公众平台验证url是否有效使用的接口
-	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/auth", method = RequestMethod.GET)
 	@ResponseBody
 	public String auth(HttpServletRequest request) {
 		// return checkWeixinRequest(request);
@@ -50,7 +50,7 @@ public class WeixinController {
 	}
 
 	// 接收微信公众号接收的消息，处理后再做相应的回复
-	@RequestMapping(value = "/auth", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/auth", method = RequestMethod.POST)
 	@ResponseBody
 	public String replyMessage(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {

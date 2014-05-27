@@ -29,24 +29,9 @@
 
 
 <script type="text/javascript">
-function Item(id,price,number) {
-	 this.id=id;
-	 this.price=price;
-	 this.number=number;
-}
-
 var map = new HashMap();  
 var totalPrice=0;
 var totalCount=0;  
-
-//alert(map.get(3));
-//map.put(1,"小张");  
-//map.put(2,"小名");  
-//alert(map.get(1));  
-//alert(map.get(2));  
-//map.remove("xxxxx");  
-//alert(map.size());  
-
 
 $(document).ready(function(){
 	$('#nav').onePageNav({
@@ -62,7 +47,7 @@ $(document).ready(function(){
 
   <script type="text/javascript">
     $(document).ready(function(){
-      SexyLightbox.initialize({color:'white', dir: 'sexyimages'});
+      SexyLightbox.initialize({color:'white', dir: '../static/shop/sexyimages'});
     });
   </script>
 </head>
@@ -95,20 +80,19 @@ $(document).ready(function(){
    <div id="search" data-reveal-id="search_bar"><i class="icon-search"></i></div> 
    <ul class="nav-list" id="nav" >
    	   <c:forEach items="${types}"  var="item" varStatus="s">
-   	   			 <li <c:if test="${s.first}"> class="current" </c:if> ><a href="#section-${item.id}">${item.name}</a></li>
+   	   			 <li <c:if test="${s.first}"> class="current" </c:if> >
+   	   			 <a href="#section-${item.id}">${item.name}
+   	   			 <!--<span class="navbar-unread">1</span> -->
+   	   			 </a>
+   	   			 </li>
    	   </c:forEach>
-   		
-   	  <!--   
-      <li class="current"><a href="#section-1">今日特惠<span class="navbar-unread">1</span></a></li>
-      <li><a href="#section-2">店长推荐</a></li>
-      <li><a href="#section-3">销售冠军</a></li>
-      <li><a href="#section-4">奶茶</a></li>
-      <li><a href="#section-5">西点/糕点</a></li>
-     -->
    </ul>
  </div>
  <!--左侧tab栏目分类代码结束-->
  </div>
+ 
+ 
+ 
  <!--右侧列表代码开始-->
  <div class="right_list" id="wrapper">
  	 <!-- 
@@ -120,7 +104,7 @@ $(document).ready(function(){
 				 <h2 class="fltitle">${item.name}</h2>
 		         <ul id="thelist">
 		         
-		         		 <c:forEach items="${item.products}"  var="product" begin="1" varStatus="varStatus">
+		         		 <c:forEach items="${item.products}"  var="product" begin="0" varStatus="varStatus">
 				   	   			   <li class="goodsitem" data-goodsid="${product.id}">
 				   	   			  
 						             <a href="${ctx}/static/shop/img/list_img.jpg" rel="sexylightbox[group1]" title="${product.name}">
@@ -130,14 +114,11 @@ $(document).ready(function(){
 						              <p class="jiaqian">￥${product.price}<span>${product.price*2}</span></p>
 						              </a>
 						              <div class="tjia">
-						              <!--  
-						              	<input type="hidden" class="id" value="1" >
-						              	<input type="hidden" class="jiage" value="100" >
-						              -->
 						                <input type="hidden" class="max" value="30" />
+						                
 						                <div class="minus hide" onclick="changeNum(${product.id},${product.price},this,'-')"><i class="icon-minus"></i></div>
 						                <div class="shuzi hide">0</div>
-						                <div class="plus" onclick="changeNum(${product.id},${product.price},this,'+')"><i class="icon-plus"></i></div>
+						                <div id="plus_${product.id}" class="plus" onclick="changeNum(${product.id},${product.price},this,'+')"><i class="icon-plus"></i></div>
 						              </div>
 						           </li>  
 				   	     </c:forEach>
@@ -149,7 +130,7 @@ $(document).ready(function(){
  
  <!--统计报价-->
 <div id="foot_box" style="display:none;">
- <ul style="display: block;" class="bott_list">
+ <ul style="display: hidden;" class="bott_list">
   
    </ul>
   
@@ -303,9 +284,17 @@ $(".bott_zhankai").click(function(){
 
       if(type=="+"){
         _shuzi++;
+        //把产品添加至购物车
+        if(isCommit==true){
+        	addCartItem(id);
+        }
       }else{
          _shuzi--;
+         //把产品从购物车中删除
+         deleteCartItem(id);
       }
+      
+  
       //计算总架构和总菜数
       changeData(id,_shuzi,price);
      
@@ -350,6 +339,20 @@ $(".bott_zhankai").click(function(){
   	
   	
   	function confirmOrder(){
+  		<%-- 判断是否登录 --%>
+  		<c:if test="${empty sessionScope.member}">
+  			   var isLogin=false;
+  		</c:if>
+  			  
+  		<c:if test="${not empty sessionScope.member}">
+  			   var isLogin=true;
+  		</c:if>
+  		
+  		if(isLogin==false){
+  			alert("尊敬的客户,请在登录以后继续完成剩余步骤!");
+  			window.location.href="${ctx}/login";
+  			return;
+  		}
   		var valueArray=map.values();
   		var idAndNumbers="";
   		for(var i=0;i<=valueArray.length-1;i++){
@@ -373,6 +376,50 @@ $(".bott_zhankai").click(function(){
             }
         });
   	}
+  	
+  	//添加购物车
+  	function addCartItem(id) {
+		var url = "${ctx}/cart/add/" + id;
+		$.ajax({
+			url : url,
+			type : 'GET',
+			dataType : "html",
+			cache : false,
+			success : function(html) {
+				if (html == "ok") {
+					//$("#deleteSuccess").fadeIn("slow");
+				}
+			}
+		});
+	}
+  	
+	
+  	//产品从购物车中删除
+  	function deleteCartItem(id) {
+		var url = "${ctx}/cart/delete/" + id;
+		$.ajax({
+			url : url,
+			type : 'GET',
+			dataType : "html",
+			cache : false,
+			success : function(html) {
+				if (html == "ok") {
+					//$("#deleteSuccess").fadeIn("slow");
+				}
+			}
+		});
+		
+	}
+  	
+  	//触发事件:首次进入页面确保不要再重复提交;
+  	var isCommit=false;
+  	<c:forEach items="${sessionScope.cart.products}" var="entry">
+	  	for (var i = 0; i < ${entry.value.count}; i++) {
+	  		$('#plus_${entry.key}').trigger("click");
+		}
+	</c:forEach>				
+	var isCommit=true;
+	
   	
   </script>
 </html>

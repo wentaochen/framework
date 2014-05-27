@@ -33,6 +33,25 @@ public class Cart extends IdEntity {
 		products.put(product.getId(), cartItem);
 	}
 
+	/**
+	 * 从购物车中删除一个产品
+	 * 
+	 * @param productId
+	 */
+	public void deleteProduct(Long productId) {
+		OrderItem cartItem = this.products.get(productId);
+		if (cartItem == null) {
+			return;
+		}
+
+		int currentCount = cartItem.getCount() - 1;
+		if (currentCount < 0) {
+			currentCount = 0;
+		}
+
+		cartItem.setCount(currentCount);
+	}
+
 	public Map<Long, OrderItem> getProducts() {
 		return products;
 	}
@@ -61,7 +80,7 @@ public class Cart extends IdEntity {
 			OrderItem item = entry.getValue();
 			totalNumber = totalNumber + item.getCount();
 		}
-		
+
 		return totalNumber;
 	}
 }

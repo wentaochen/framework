@@ -49,8 +49,7 @@ public class BindingController {
 	 */
 	@RequestMapping(value = "/binding/{openid}", produces = "text/html;charset=UTF-8")
 	public String bindingForm(@PathVariable("openid") String openid,
-			HttpSession session,Model model)
-			throws IOException {
+			HttpSession session, Model model) throws IOException {
 		// 如果已经注册采用重定向的方式登陆到首页
 		if (memberService.findByOpenid(openid) != null) {
 			return REDIRECT_INDEX_OPENID + openid;
@@ -71,8 +70,8 @@ public class BindingController {
 	 * @return
 	 * @throws IOException
 	 */
-	//produces = "text/html;charset=UTF-8",
-	@RequestMapping(value = "/binding",method = RequestMethod.POST)
+	// produces = "text/html;charset=UTF-8",
+	@RequestMapping(value = "/binding", method = RequestMethod.POST)
 	@ResponseBody
 	public String createMember(HttpSession session, Member member, Model model)
 			throws IOException {
@@ -85,5 +84,18 @@ public class BindingController {
 			logger.error(Exceptions.getStackTraceAsString(e));
 			return "fail";
 		}
+	}
+
+	/**
+	 * 跳转至用户注册页面
+	 * 
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/binding", method = RequestMethod.GET)
+	public String toMemberRegisterForm(Model model) throws IOException {
+
+		return Config.VIEWS_SHOP + "register";
 	}
 }

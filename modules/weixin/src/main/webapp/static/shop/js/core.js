@@ -80,3 +80,9 @@ function HashMap() {
 		entry = new Object();
 	}
 }
+
+function Item(id,price,number) {
+	 this.id=id;
+	 this.price=price;
+	 this.number=number;
+}

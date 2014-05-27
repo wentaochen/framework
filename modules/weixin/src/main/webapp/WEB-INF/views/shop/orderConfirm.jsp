@@ -20,6 +20,7 @@
 <![endif]-->
 <script src="${ctx}/static/shop/js/jquery.min.1.8.3.js" type="text/javascript"></script>
 <script src="${ctx}/static/shop/js/iscroll.js"></script>
+<script src="${ctx}/static/shop/js/core.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -50,7 +51,7 @@
            <div class="butt_right">
               <div class="fkbut" >
                  货到付款
-                 <div class="xzhong" style="display:none;"></div> 
+                 <div class="xzhong" style="display:block;"></div> 
               </div>
             </div>支付方式：
         </div> 
@@ -78,9 +79,7 @@
 		            </li>  
               </c:forEach>
 		</ul>
-     
    </div>
- 
 
 </div>
 <div id="foot_box">  

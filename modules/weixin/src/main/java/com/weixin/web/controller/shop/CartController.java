@@ -67,6 +67,26 @@ public class CartController {
 	}
 
 	/**
+	 * 产品从购物车中删除
+	 * 
+	 * @param id
+	 *            产品主键
+	 */
+	@RequestMapping(value = "/delete/{id}")
+	@ResponseBody
+	public String deleteCart(@PathVariable("id") Long id, HttpSession session,
+			Model model) throws IOException {
+		Cart cart = (Cart) session.getAttribute(Config.SESSION_CART);
+		if (cart == null) {
+			return "ok";
+		}
+
+		cart.deleteProduct(id);
+
+		return "ok";
+	}
+
+	/**
 	 * 产品加入购物车
 	 * 
 	 * @param id
@@ -74,11 +94,11 @@ public class CartController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public String addCartItems(@RequestParam("ids") String ids, HttpSession session,
-			Model model) throws IOException {
+	public String addCartItems(@RequestParam("ids") String ids,
+			HttpSession session, Model model) throws IOException {
 
 		String[] keyAndValue = ids.split(";");
-		
+
 		for (String tempValue : keyAndValue) {
 			String[] value = tempValue.split(":");
 			Long pId = Long.valueOf(value[0]);
